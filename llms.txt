@@ -1,12 +1,12 @@
 # Claude Private Browser Kit
 
-> Windows research toolkit for Claude Desktop: process-local external-link routing, a dedicated Edge executable and profile, app-path WFP restrictions, and a read-only audit.
+> 面向中文用户的 Claude Desktop 专用浏览器研究工具包。Windows app-scoped external links, dedicated Edge profiles, WFP network controls and a read-only audit. Chinese-first documentation with an English overview.
 
 Unofficial. MIT covers original material only. Not a universal installer, full sandbox, fingerprint-spoofing tool, or account-ban prevention product. Static PASS is not proof of real traffic behavior. Fresh-machine deployment and authenticated model-driven workflows remain unverified. This repository-local index is a reading aid, not a discovery guarantee.
 
 ## Documentation
 
-- [English overview](README.md): purpose, safe commands, code map and limitations.
+- [English overview](README.en.md): purpose, safe commands, code map and limitations.
 - [中文概览](README.zh-CN.md): 用途、检查入口与边界。
 - [Design guide](docs/GUIDE.en.md): implementation logic and rollback.
 - [中文完整指南](docs/GUIDE.zh-CN.md): 完整思路与实现逻辑。

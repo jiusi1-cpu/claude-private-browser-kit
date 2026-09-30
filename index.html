@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Claude 专用浏览器工具包 | Claude Private Browser Kit</title>
+  <meta name="description" content="给 Claude 一个专用浏览器，把日常浏览器留给自己。Windows 开源研究工具包：独立 Edge、应用内链接适配、只读检查与回滚参考。">
+  <meta property="og:title" content="Claude 专用浏览器工具包 | Claude Private Browser Kit">
+  <meta property="og:description" content="Give Claude its own browser. Keep yours. 中文指南 / English documentation.">
+  <meta property="og:image" content="https://jiusi1-cpu.github.io/claude-private-browser-kit/assets/social-preview-zh.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:,">
+  <style>
+    :root{color-scheme:light;--ink:#1d302a;--muted:#57635d;--green:#126b51;--line:#dbe3de;--paper:#f5f8f6}
+    *{box-sizing:border-box}body{margin:0;color:var(--ink);background:#fff;font:16px/1.7 system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;letter-spacing:0}a{color:var(--green);text-underline-offset:4px}a:hover{text-decoration-thickness:2px}button,a,select{touch-action:manipulation}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #b46a22;outline-offset:4px}[hidden]{display:none!important}.wrap{max-width:1080px;margin:auto;padding:0 28px}header{border-bottom:1px solid var(--line)}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:78px}.brand{font-size:16px;font-weight:700;text-decoration:none;color:var(--ink)}.controls{display:flex;gap:16px;align-items:center;flex-shrink:0}select{font:inherit;padding:7px 10px;border:1px solid #b8c8be;border-radius:4px;background:white;color:var(--ink)}main{padding:48px 0 30px}.meta{color:var(--green);font-size:14px;font-weight:650;margin:0 0 12px}h1{font-size:38px;line-height:1.3;margin:0 0 14px;overflow-wrap:anywhere}h2{font-size:24px;line-height:1.4;margin:0 0 18px}h3{font-size:18px;margin:0 0 8px}p{margin:0 0 18px}.intro{font-size:20px;max-width:790px}.subtle{color:var(--muted)}.actions{display:flex;gap:12px;flex-wrap:wrap;margin:24px 0}.action{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 19px;border:1px solid var(--green);border-radius:4px;text-decoration:none;font-weight:650}.primary{background:var(--green);color:white}.notice{border-left:3px solid #b46a22;padding:6px 0 6px 16px;margin:24px 0 0;color:var(--muted)}section{padding:35px 0;border-top:1px solid var(--line);margin-top:34px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}.grid p{color:var(--muted);margin:0}.figure{margin:26px 0 0}.figure img{display:block;width:100%;height:auto;aspect-ratio:2/1;border:1px solid var(--line)}.steps{display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:start}.terminal{background:#172b24;color:#e5f4e9;padding:22px;border-radius:6px;min-width:0}pre{margin:0;white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.8 Consolas,monospace}code{font-family:Consolas,monospace}.result{font-size:14px;margin-top:16px;color:#cedfd4}.links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 36px}.links a{display:block;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none}.links small{display:block;color:var(--muted);font-size:14px;margin-top:3px}details{border-bottom:1px solid var(--line);padding:15px 0}summary{cursor:pointer;font-weight:650}details p{margin:12px 0 0;color:var(--muted)}footer{background:var(--paper);padding:24px 0;font-size:14px;color:var(--muted)}footer p{margin:0}.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}@media(max-width:650px){.wrap{padding:0 20px}.top{min-height:74px;gap:12px}.brand{max-width:160px;font-size:14px;line-height:1.4}.controls{gap:8px}.controls>a{display:none}main{padding-top:30px}h1{font-size:30px}.intro{font-size:18px}.grid,.steps,.links{grid-template-columns:1fr}.grid{gap:23px}.steps{gap:16px}section{padding-top:28px;margin-top:28px}.action{flex:1}h2{font-size:22px}}
+  </style>
+  <script>
+    (function(){
+      var saved;try{saved=localStorage.getItem('cpbk-language')}catch(e){}
+      var browser=(navigator.languages&&navigator.languages[0])||navigator.language||'en';
+      var lang=saved==='zh'||saved==='en'?saved:(/^zh(?:-|$)/i.test(browser)?'zh':'en');
+      document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+      document.documentElement.dataset.lang=lang;
+    }());
+  </script>
+  <style>html[data-lang="en"] [data-language="zh"],html[data-lang="zh"] [data-language="en"]{display:none}</style>
+</head>
+<body>
+<header><div class="wrap top"><a class="brand" href="./">Claude Private Browser Kit</a><div class="controls"><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit">GitHub</a><label class="sr" for="language">语言 / Language</label><select id="language" aria-label="语言 / Language"><option value="zh">简体中文</option><option value="en">English</option></select></div></div></header>
+<main class="wrap">
+<div data-language="zh">
+  <p class="meta">WINDOWS · MIT 开源 · 研究预览版</p>
+  <h1>Claude 专用浏览器工具包</h1>
+  <p class="intro">给 Claude 一个专用浏览器，把日常浏览器留给自己。</p>
+  <p class="subtle">分清桌面端外部链接与 MCP 浏览器入口，为指定应用配置独立浏览器资料和网络路径，不替换 Windows 默认浏览器。</p>
+  <nav class="actions" aria-label="项目入口"><a class="action primary" href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.zh-CN.md">阅读中文指南</a><a class="action" href="https://github.com/jiusi1-cpu/claude-private-browser-kit">查看源码</a></nav>
+  <p class="notice">这是源码与验证文档，不是一键安装器。独立浏览器不等于完整安全沙箱，也不保证账号安全。</p>
+  <section><h2>只改需要改的入口</h2><div class="grid"><div><h3>外部网页，进入专用 Edge</h3><p>进程内适配 Claude 打开的网页，日常软件保留原来的浏览器入口。</p></div><div><h3>浏览器资料分开</h3><p>独立程序与独立资料目录，不导入日常浏览器的 Cookie、密码或历史。</p></div><div><h3>先检查，再部署</h3><p>从只读检查开始，结合真实网络验收；明确改了什么，以及如何回滚。</p></div></div><figure class="figure"><img src="assets/social-preview-zh.png" width="1280" height="640" alt="架构示意：Claude 外部网页经专用 Edge 和指定网络规则；其他软件保留日常浏览器。"></figure></section>
+  <section><h2>先运行只读检查</h2><div class="steps"><div><p>需要 Git 和 Node.js 22 或更新版本，无须安装 npm 依赖。</p><p class="subtle">这些命令不会修改系统代理、注册表或防火墙规则。示例路径返回“尚未验证”，不代表你的环境已通过。</p><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/CHECKLIST.md">打开完整验收清单</a></div><div class="terminal"><pre>git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
+cd claude-private-browser-kit
+npm test
+npm run check:release
+node scripts/audit.cjs --config examples/audit.example.json</pre><p class="result">示例审计的预期结果：UNVERIFIED · 退出码 2</p></div></div></section>
+  <section><h2>按问题找资料</h2><div class="links"><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.zh-CN.md">完整原理与实施顺序<small>方案取舍、独立路径、配置与回滚</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/LOCAL-CASE.md">已经测过什么<small>历史脱敏证据与尚未验证的部分</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/SHARE.zh-CN.md">把项目介绍给朋友<small>中文短介绍、长介绍与配图</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/issues">提交中文反馈<small>附版本与复现步骤，不要上传私人配置</small></a></div></section>
+  <section><h2>先说清边界</h2><details><summary>配好了 MCP，为什么登录页还开在别的浏览器？</summary><p>MCP 启动浏览器与桌面端打开外部网页是两条路径，需要分别适配和验收。现有证据没有证明登录后的真实 Claude 模型驱动 MCP 全链路通过。</p></details><details><summary>能保证固定 IP、家宽或者不封号吗？</summary><p>不能。出口性质与稳定性取决于你有权使用的上游服务，需要实际测量。本项目不提供账号或代理节点，不承诺隐藏所有地区信号。</p></details><details><summary>适合完全没有技术基础的用户吗？</summary><p>当前需要理解 Windows 配置并按环境适配。应用补丁有版本耦合和签名代价，浏览器副本要维护更新。全新机器完整部署尚未验证，不建议盲跑参考脚本。</p></details></section>
+</div>
+<div data-language="en">
+  <p class="meta">WINDOWS · MIT LICENSE · RESEARCH PREVIEW</p>
+  <h1>Claude Private Browser Kit</h1>
+  <p class="intro">Give Claude its own browser. Keep yours.</p>
+  <p class="subtle">Separate desktop external links from MCP browser launches. Give selected applications their own browser data and network route without replacing the Windows default browser.</p>
+  <nav class="actions" aria-label="Project links"><a class="action primary" href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.en.md">Read the guide</a><a class="action" href="https://github.com/jiusi1-cpu/claude-private-browser-kit">Browse source</a></nav>
+  <p class="notice">Source and verification documents, not a one-click installer. A dedicated browser is not a full sandbox or an account-safety guarantee.</p>
+  <section><h2>Scope the change</h2><div class="grid"><div><h3>A dedicated external-link route</h3><p>A process-local adapter routes Claude's web links to a dedicated Edge, keeping the daily browser entry point unchanged.</p></div><div><h3>Separate browser data</h3><p>A separate executable and profile, without importing your daily cookies, passwords or browsing history.</p></div><div><h3>Audit before deployment</h3><p>Start with read-only checks, then test real network behavior. Keep changes inspectable and rollback explicit.</p></div></div><figure class="figure"><img src="assets/social-preview.png" width="1280" height="640" alt="Architecture: Claude uses dedicated Edge and app-path network controls; other apps keep the daily browser."></figure></section>
+  <section><h2>Start with read-only checks</h2><div class="steps"><div><p>Requires Git and Node.js 22 or newer. No npm dependency installation.</p><p class="subtle">These commands do not change the system proxy, registry or firewall. Example paths return UNVERIFIED, not a passing environment.</p><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/CHECKLIST.md">Open the verification checklist</a></div><div class="terminal"><pre>git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
+cd claude-private-browser-kit
+npm test
+npm run check:release
+node scripts/audit.cjs --config examples/audit.example.json</pre><p class="result">Expected example audit: UNVERIFIED · exit code 2</p></div></div></section>
+  <section><h2>Find the evidence</h2><div class="links"><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.en.md">Design and implementation<small>Tradeoffs, separate paths, configuration and rollback</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/LOCAL-CASE.md">What was tested<small>Redacted historical evidence and remaining gaps</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/SECURITY.md">Security boundaries<small>Scope, risks and responsible reporting</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/issues">Report an issue<small>Include versions and steps, never private configuration</small></a></div></section>
+  <section><h2>Know the limits</h2><details><summary>Why does the login page use a different browser from MCP?</summary><p>MCP browser startup and desktop external-link handling are separate paths. Each needs its own adaptation and verification. The retained evidence does not establish an authenticated model-driven MCP workflow.</p></details><details><summary>Does this guarantee a stable IP or prevent bans?</summary><p>No. Exit properties and stability depend on your authorized upstream service and require measurement. This project supplies neither accounts nor proxy nodes, and makes no claim to hide every regional signal.</p></details><details><summary>Is it ready for nontechnical users?</summary><p>Not as a turnkey installer. Application patches have version and signature tradeoffs; the separate browser needs security updates. Fresh-machine deployment remains unverified. Review and adapt reference scripts before use.</p></details></section>
+</div>
+<noscript><p>JavaScript 未启用：请使用 <a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/README.zh-CN.md">中文文档</a> / <a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/README.en.md">English documentation</a>。</p></noscript>
+</main>
+<footer><div class="wrap"><p data-language="zh">非官方项目，与 Anthropic、Microsoft 无隶属关系。只访问你有权使用的账号、网络和服务。<a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/LICENSE">MIT 许可证</a></p><p data-language="en">Unofficial; not affiliated with Anthropic or Microsoft. Use only accounts, networks and services you are authorized to access. <a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/LICENSE">MIT license</a></p></div></footer>
+<script>
+  const control=document.getElementById('language');
+  function applyLanguage(lang){
+    document.documentElement.dataset.lang=lang;
+    document.documentElement.lang=lang==='zh'?'zh-CN':'en';
+    control.value=lang;
+    document.title=lang==='zh'?'Claude 专用浏览器工具包':'Claude Private Browser Kit';
+    document.querySelector('meta[name="description"]').content=lang==='zh'?'给 Claude 一个专用浏览器，把日常浏览器留给自己。Windows 开源研究工具包：独立 Edge、应用内链接适配、只读检查与回滚参考。':'Give Claude its own browser. Keep yours. Windows toolkit for scoped links, separate Edge profiles, read-only checks and rollback references.';
+  }
+  applyLanguage(document.documentElement.dataset.lang);
+  control.addEventListener('change',()=>{applyLanguage(control.value);try{localStorage.setItem('cpbk-language',control.value)}catch(e){}});
+</script>
+</body>
+</html>

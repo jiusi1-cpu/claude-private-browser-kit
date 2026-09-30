@@ -2,7 +2,7 @@
     "schema":  1,
     "package":  "claude-private-browser-kit",
     "version":  "0.1.0-preview",
-    "createdAtUtc":  "2026-09-30T15:31:42.0058640+00:00",
+    "createdAtUtc":  "2026-09-30T16:51:38.9346063+00:00",
     "excludes":  [
                      "Vendor binaries",
                      "Application archives",
@@ -23,9 +23,19 @@
                       "sha256":  "96caa02658fbf1704d7cec9f4a90e6ebbce23e24c9a88925e9fa694682f682ae"
                   },
                   {
+                      "path":  ".nojekyll",
+                      "bytes":  65,
+                      "sha256":  "86441c21aae9cd577f4fb6ee075dacb385d03000f2a1863ba0304afcec3c39bd"
+                  },
+                  {
                       "path":  "assets/social-preview.png",
                       "bytes":  67190,
                       "sha256":  "6ea19f6b66ede75a86b44657199fd8214b634a083ce2cd1b2577fd7b14421a72"
+                  },
+                  {
+                      "path":  "assets/social-preview-zh.png",
+                      "bytes":  107603,
+                      "sha256":  "7639c3de06d523915d3bbd1ea94c01200626ad49ef16c7076a9be26ef9c0e591"
                   },
                   {
                       "path":  "CONTRIBUTING.md",
@@ -49,8 +59,8 @@
                   },
                   {
                       "path":  "docs/LAUNCH.md",
-                      "bytes":  5475,
-                      "sha256":  "2d4dfe388c7b97d80dff864386a50374001eb7b4b224430eec790f2208a8e797"
+                      "bytes":  5641,
+                      "sha256":  "f93da13de89c59cbc606c41398d055898b868adf003c34260255a720c594b7ec"
                   },
                   {
                       "path":  "docs/LOCAL-CASE.md",
@@ -73,6 +83,11 @@
                       "sha256":  "40c6f1a43b3b4d0d6730fe16d820ba9aa50d864d77091a6cb5b7721e1b02c725"
                   },
                   {
+                      "path":  "docs/SHARE.zh-CN.md",
+                      "bytes":  3318,
+                      "sha256":  "8f11247096c7c69c2f024af3e4382a482924514c6d0525dbd6ed54a15d9bc24f"
+                  },
+                  {
                       "path":  "evidence/local-case.redacted.json",
                       "bytes":  6314,
                       "sha256":  "3fbe8829b9360d9e5a77135befa2c45e7c33631e868153f0fe267f2573c55787"
@@ -80,7 +95,7 @@
                   {
                       "path":  "evidence/package-checks.json",
                       "bytes":  894,
-                      "sha256":  "6d53a556ba9d4626803b64268a86831f76b4f91a8769049373f46918efbe9d31"
+                      "sha256":  "db1b534d6e72e7beda2c095b8eaf7412191754094c040deb7dd9a206d2969041"
                   },
                   {
                       "path":  "evidence/static-audit.redacted.json",
@@ -108,29 +123,39 @@
                       "sha256":  "f966a7b827d89b406951102684ae3bd4b665f417004ba79a8a1566796cefd37c"
                   },
                   {
+                      "path":  "index.html",
+                      "bytes":  15007,
+                      "sha256":  "608f7889eefcac1fbd7e5d895f2dd64ecafdd1bbd5cbe98ab03515e97f45a083"
+                  },
+                  {
                       "path":  "LICENSE",
                       "bytes":  1096,
                       "sha256":  "fc27be56c0641cc29686843659de7b56f48c545e33415acf9da44f78aada7a7d"
                   },
                   {
                       "path":  "llms.txt",
-                      "bytes":  1357,
-                      "sha256":  "715a406dc772fc97d4d77f90d89d6fb235f560c3ab2567aa36254b8a792b6300"
+                      "bytes":  1415,
+                      "sha256":  "23f5db2acb2377873ce7450d60005680c2742f9d6e8f336e680608c2c0b4438e"
                   },
                   {
                       "path":  "package.json",
-                      "bytes":  458,
-                      "sha256":  "c1280de0aad805e64fbcb6797ba65b7a0cd7aa76e2ee151a67c3cc40c9b14e10"
+                      "bytes":  485,
+                      "sha256":  "d13575dc74d6d4ec4995b319c04ec2bb2bbd6943afc37227f74528b86fb091e9"
                   },
                   {
-                      "path":  "README.md",
+                      "path":  "README.en.md",
                       "bytes":  7088,
                       "sha256":  "fab012616328a242e164d6b43146d7ce19455a0445782d13e05db2e0744f964f"
                   },
                   {
+                      "path":  "README.md",
+                      "bytes":  8615,
+                      "sha256":  "2f6d2fa3fde9f6e35b0af42bd926a59b8d40f1618405d50dc89273597fe6ec1e"
+                  },
+                  {
                       "path":  "README.zh-CN.md",
-                      "bytes":  6473,
-                      "sha256":  "f591afa3899d5a4cbc02ddd5984c4eb88957a5f50231a125f535d2f0415a41d9"
+                      "bytes":  8615,
+                      "sha256":  "2f6d2fa3fde9f6e35b0af42bd926a59b8d40f1618405d50dc89273597fe6ec1e"
                   },
                   {
                       "path":  "reference/Block-ClaudeBrowserBridge.ps1.example",
@@ -204,8 +229,8 @@
                   },
                   {
                       "path":  "scripts/release-check.cjs",
-                      "bytes":  3884,
-                      "sha256":  "e9304f10243e6b688ff7ddc0bd74ab54f45e3c55e89d3130f1961a456b71e6b0"
+                      "bytes":  3961,
+                      "sha256":  "94bd2e62e8434bcae0d9c521e880498396bf88549aa9a65b49d503756e155d62"
                   },
                   {
                       "path":  "SECURITY.md",
@@ -236,6 +261,11 @@
                       "path":  "tests/audit.cjs",
                       "bytes":  1332,
                       "sha256":  "239512b64b87df59ce1c530f328b7a06b80b51c1100ad61a1cfd7371d9b6ab93"
+                  },
+                  {
+                      "path":  "tests/language.cjs",
+                      "bytes":  2027,
+                      "sha256":  "c5e852dbcdd47954cce6b740158505df23b12fe3c521d7532393071e8b4f7ce7"
                   },
                   {
                       "path":  "tests/private-links.cjs",

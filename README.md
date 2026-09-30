@@ -1,110 +1,136 @@
-# Claude Private Browser Kit
+# Claude 专用浏览器工具包
 
-[简体中文](README.zh-CN.md) | English
+**给 Claude 一个专用浏览器，把日常浏览器留给自己。**
 
-**Give Claude its own browser. Keep yours.**
+[English](README.en.md) · [完整中文指南](docs/GUIDE.zh-CN.md) · [检查清单](docs/CHECKLIST.md) · [反馈问题](https://github.com/jiusi1-cpu/claude-private-browser-kit/issues)
 
-Separate Claude Desktop's external links, browser profile, and proxy route on Windows, without replacing your daily default browser.
+Claude Private Browser Kit 是面向中文用户的 Windows 开源研究工具包：整理 Claude Desktop 的外部网页打开适配、独立 Edge 程序与资料目录、按应用路径约束网络，以及检查和回滚方法。
 
-![Claude Private Browser Kit architecture: a dedicated Claude browser route alongside the unchanged daily browser route](assets/social-preview.png)
+![Claude 专用浏览器工具包：Claude 与日常软件分开使用浏览器](assets/social-preview-zh.png)
 
-**Windows | MIT | Research preview | English / 简体中文**
+**Windows · MIT 开源 · 中文优先 · 研究预览版**
 
-## Why This Exists
+> 当前交付是源码、参考脚本和验证文档，不是下载后双击就能完成配置的一键安装器。可以先运行只读检查，不必先修改系统。
 
-Claude opens a link. Your everyday browser appears, with your everyday profile. Changing the Windows default browser would affect every other app too.
+## 你可能也遇到过
 
-This project documents a narrower approach: an application-local link adapter, a dedicated Edge copy and profile, and app-path network restrictions. It includes original source, a read-only auditor, reproducible checklists, and rollback references.
+- Claude 打开网页，跳进的却是你平时使用的 Edge。
+- 已经配置了浏览器 MCP，点击桌面端的登录按钮还是打开另一个浏览器。
+- 只想让 Claude 和专用浏览器使用指定代理，不想改全局默认浏览器。
+- 代理能用，却不清楚断开之后会不会直连，DNS、UDP 又该怎么检查。
+- 跟着教程改过一些配置，后来不知道改了哪里，也不知道怎么恢复。
 
-- **Scoped routing:** Claude's external web links go to its dedicated browser in the tested case.
-- **Separate browser data:** a dedicated executable and profile, with independent update maintenance.
-- **Evidence, not a green badge:** static checks distinguish PASS, FAIL, and UNVERIFIED; live network tests remain explicit.
+本项目把这些问题拆成独立入口处理，并给出已实施案例、源码与验收方法。**MCP 浏览器配置和桌面端外部链接适配不是同一件事**，这是本项目重点解决的差别。
 
-**This is a source and documentation package, not a universal installer.** Start with the safe checks below before adapting the implementation.
+## 做了什么，没做什么
 
-An auditable case study and toolkit for giving Claude Desktop a dedicated browser executable, separate browser data, a controlled proxy route, and a narrowly scoped external-link adapter without replacing the Windows default browser.
+| 你的需求 | 本项目提供 | 需要知道的边界 |
+| --- | --- | --- |
+| Claude 打开的网页进入专用浏览器 | Claude 进程内的外部链接适配器 | 涉及应用补丁，与具体版本耦合 |
+| 不混用日常浏览器资料 | 独立 Edge 程序和资料目录的实施方法 | 同一 Windows 用户下不等于完整安全沙箱 |
+| 只约束指定应用的网络路径 | Windows Filtering Platform（WFP）源码与代理配置参考 | 规则按程序路径生效，不自动覆盖所有子进程或升级后的新路径 |
+| 检查代理中断、UDP、DNS 等行为 | 检查清单、控制实验与历史脱敏证据 | 静态检查通过不能替代真实流量测试 |
+| 改动可以核对、可以恢复 | 文件哈希检查、补丁快照与回滚参考 | 不能直接把别人的备份用于自己的机器 |
 
-This is not a fingerprint-spoofing product, an account-ban prevention guarantee, or a way to establish service eligibility. It does not hide an entire operating system from an agent with arbitrary code execution. Use only accounts, networks, and services you are authorized to access.
+**不提供账号、代理节点或所谓“干净 IP”；不承诺防封号，也不宣称隐藏所有地区信号。** 这里只讨论你有权使用的账号、网络与服务。项目不会修改系统时区。
 
-## Start Here
+## 先花五分钟，看看是否适合你
 
-- [Complete design and implementation logic](docs/GUIDE.en.md)
-- [Bilingual audit checklist](docs/CHECKLIST.md)
-- [X research, contradictory reports, and evidence limits](docs/RESEARCH-X.md)
-- [Sanitized local test results and unverified areas](docs/LOCAL-CASE.md)
-- [Security boundaries](SECURITY.md)
-- [What is packaged and what is deliberately excluded](docs/PACKAGE-MAP.md)
-- [Pre-publication checklist](docs/RELEASE.md)
-- [Concise documentation index for agents](llms.txt)
-- [Contributing and reproducible reports](CONTRIBUTING.md)
+适合愿意阅读文档、理解 Windows 网络规则，并能针对自己环境适配的用户。只想双击安装、不愿维护浏览器副本或应用补丁的用户，暂时不适合直接部署这套参考方案。
 
-## Architecture
-
-```text
-Claude Desktop external HTTP(S) link
-  -> process-local shell.openExternal adapter
-  -> dedicated Edge executable + dedicated profile
-  -> app-path WFP restrictions
-  -> loopback TCP proxy -> authorized upstream proxy -> Internet
-
-Claude browser MCP -> private Node, stdio -> same dedicated Edge/profile
-Other Windows applications -> original Windows URL associations -> daily browser
-```
-
-There is no global URL router in the deployed case. Browser Tamer was considered and rejected because a global default-handler architecture would also receive links from unrelated applications.
-
-## Safe Local Checks
-
-Requires Node.js 22 or newer. These commands use only built-in Node modules; no `npm install` is required.
+先克隆仓库，需要本机已有 Git 和 Node.js 22 或更新版本：
 
 ```powershell
+git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
+cd claude-private-browser-kit
 npm test
 npm run check:release
 node scripts/audit.cjs --config examples/audit.example.json
 ```
 
-The last command intentionally returns **UNVERIFIED, exit 2**, because example paths are not a configured environment. Create a local `audit.local.json` with your actual paths, then pass that file. It is gitignored. Do not publish it.
+这些检查只用 Node 标准库，**无须 npm install**，不会安装网络规则、改注册表或修改 Claude。
 
-The auditor is read-only and makes no network requests. It can compare paths and hashes, inspect the package hook, and flag missing resources. It cannot establish real traffic behavior, successful login, or account safety. Read [the checklist](docs/CHECKLIST.md) before interpreting any PASS.
+最后一条使用示例路径，预期是 **UNVERIFIED（尚未验证），退出码 2**。这不是部署成功，也不是让你忽略错误。检查自己的环境时，按 [完整指南](docs/GUIDE.zh-CN.md) 建立本地 `audit.local.json`，不要把真实路径和配置上传到仓库。
 
-## Code Layout
-
-| Path | Purpose |
+| 结果 | 含义 |
 | --- | --- |
-| `src/private-links.cjs` | Original process-local external-link adapter, with no system default changes |
-| `src/ClaudeGuardWfp.cs` | Original Windows Filtering Platform helper, x64/admin required for rule changes |
-| `src/NetworkProbe.cs` | Controlled TCP/UDP probe source, not a prebuilt executable |
-| `src/guarded-mcp.cjs` | Original stdio tool allowlist around a separately installed Playwright MCP |
-| `scripts/audit.cjs` | Read-only static environment audit |
-| `scripts/release-check.cjs` | Source-package hygiene and local Markdown-link checks |
-| `reference/*.example` | Redacted implementation scripts requiring manual adaptation, not executable entry points |
-| `examples/` | Non-working placeholder configurations, without credentials |
-| `evidence/` | Minimal historical test summaries, without private paths or exit IP |
+| PASS | 本项静态条件通过，不代表全部网络行为通过 |
+| FAIL | 检查发现明确不符合条件的项，需要处理 |
+| UNVERIFIED | 缺少配置或实际测试证据，不能宣布通过 |
 
-## What Was Actually Tested
+**建议顺序：读边界 → 运行只读检查 → 备份与适配 → 做真实网络验收 → 验证回滚。** 参考脚本保留 `.example` 后缀，不应改名后直接盲跑。
 
-The original local case used Claude Desktop `2.9939.2`, Edge `154.0.4258.37`, and Playwright MCP `0.0.83`. It exercised direct-route blocking, proxy outage recovery, UDP delivery with a positive control, DNS observations with a positive control, browser/MCP egress, external-link routing, and an actual patch rollback. The public export is not a fresh-machine deployment test. Login and authenticated Claude model-driven MCP workflows remain unverified in the retained evidence.
+## 为什么不直接换系统默认浏览器？
 
-## Important Tradeoffs
+因为那会改变其他软件打开网页的入口。本案例选择只在 Claude 进程内适配外部网页：
 
-- Patching application files invalidates vendor trust assumptions. The case already had an invalid executable signature before this adapter. Updating ASAR digests does not restore Authenticode.
-- The patch retained Electron security fuse bytes; it did not disable package-integrity checks.
-- The private browser is a real separate copy and needs its own update maintenance. Do not freeze an old browser indefinitely.
-- A separate profile under the same Windows user is not a VM or a full filesystem isolation boundary.
-- Manual browser use and MCP share a profile. Close the manual instance before starting an MCP-managed instance.
-- WFP `Verify` is a presence/basic-metadata check, not a complete predicate or live network proof.
-- No time-zone changes, global proxy changes, account actions, or GitHub publication are performed by the safe commands above.
+```text
+Claude Desktop 的外部网页
+    → 进程内链接适配器
+    → 专用 Edge 程序 + 专用资料目录
+    → 按程序路径限制网络
+    → 本机 TCP 代理 → 已授权的上游代理
 
-## License and Status
+Claude 浏览器 MCP
+    → 独立 Node / 标准输入输出管道
+    → 同一专用 Edge 环境
 
-[MIT](LICENSE) for original material only; see [third-party boundaries](THIRD_PARTY_NOTICES.md). Unofficial and not affiliated with Anthropic or Microsoft. The npm `private` flag prevents accidental npm publication; it does not prevent hosting source on GitHub.
+其他 Windows 软件
+    → 原有系统默认入口
+    → 你的日常浏览器
+```
 
-## FAQ
+这里的“专用”有明确范围：浏览器状态和指定路径的网络规则。具备本机代码执行权限的智能体仍可能访问文件、启动其他程序；不能把此方案当作虚拟机或完整沙箱。
 
-**Does this change the Windows default browser?** No global URL router was deployed in the documented case. The adapter is scoped to Claude's process.
+## 按你的问题找文档
 
-**Is a separate Edge profile a security sandbox?** No. It separates browser data, not arbitrary filesystem access by code running as the same Windows user.
+| 想了解什么 | 从这里开始 |
+| --- | --- |
+| 完整原理、方案取舍与实施顺序 | [中文指南](docs/GUIDE.zh-CN.md) |
+| IP、TCP/UDP、WebRTC、DNS 怎么验收 | [中英双语检查清单](docs/CHECKLIST.md) |
+| 本机到底测过什么、没测什么 | [脱敏案例记录](docs/LOCAL-CASE.md) |
+| 社区传言哪些有依据 | [X 研究与证据边界](docs/RESEARCH-X.md) |
+| 哪些源码公开，哪些东西没有打包 | [打包清单](docs/PACKAGE-MAP.md) |
+| 如何描述问题而不泄露自己的配置 | [贡献指南](CONTRIBUTING.md) |
+| 想转发给同样有需求的人 | [中文介绍与转发文案](docs/SHARE.zh-CN.md) |
+| 让 AI 快速定位资料 | [精简文档索引](llms.txt) |
 
-**Does it guarantee a fixed IP or prevent account bans?** No. Exit stability depends on your authorized upstream service and must be measured. No account-safety or region-eligibility guarantee is made.
+## 源码入口
 
-**Can an AI agent understand this repository?** Start with [llms.txt](llms.txt), then the guide and checklist. This is a navigation aid, not a claim of crawler indexing or AI recommendation.
+- `src/private-links.cjs`：桌面端外部网页打开适配，不替换系统默认浏览器。
+- `src/ClaudeGuardWfp.cs`：WFP 网络限制辅助源码，修改规则需要 x64 管理员进程。
+- `src/NetworkProbe.cs`：TCP/UDP 控制实验探针源码。
+- `src/guarded-mcp.cjs`：围绕独立安装的 Playwright MCP 的工具白名单；不是完整安全边界。
+- `scripts/audit.cjs`：不联网的只读静态检查器。
+- `reference/*.example`：需人工适配的脱敏历史实施脚本。
+- `examples/`、`evidence/`：无真实节点的示例与最小化历史证据。
+
+## 验证到哪一步了？
+
+原本机案例使用 Claude Desktop `2.9939.2`、Edge `154.0.4258.37`、Playwright MCP `0.0.83`，执行过直连阻断、代理中断恢复、UDP/DNS 阳性对照、浏览器与 MCP 出口检查、外部链接路由和实际回滚。版本仅用于复现记录，不代表推荐长期停留在这些版本。
+
+**仍未证明：**全新电脑完整部署、登录后的真实 Claude 模型驱动 MCP 全链路，以及长期出口稳定性。Cowork、Claude Code 和任意子进程不会因配置了专用浏览器就自动全部受控，需要分别验收。
+
+应用补丁会影响厂商签名信任状态；更新应用包摘要不会恢复 Authenticode。独立 Edge 副本需要安全更新。WFP `Verify` 只核对规则存在与部分元数据，不能替代规则条件审计和实际网络实验。详见 [安全边界](SECURITY.md)。
+
+## 常见问题
+
+**只新建一个 Edge 配置文件够不够？**  
+它可以分离部分浏览器资料，但未解决桌面端外部链接入口，也不能让按可执行路径施加的网络规则区分同一程序的不同资料目录。
+
+**能保证固定 IP、家宽或不封号吗？**  
+不能。上游出口性质和稳定性需要你自行核验，本项目不出售或推荐代理，也不把一次检测结果当成长期保证。
+
+**需要同时运行手动浏览器和 MCP 吗？**  
+本案例两者共用专用资料目录。开始 MCP 任务前应关闭手动实例，避免资料目录占用冲突。
+
+**后续升级 Claude 或 Edge 怎么办？**  
+重新核对路径、补丁与规则，然后复测。不要把一次成功当成所有未来版本都兼容。
+
+## 一起把它做得更可复现
+
+最有价值的反馈是：哪个 Windows/Claude/Edge 版本、复现步骤、预期和实际行为，以及脱敏后的检查结果。欢迎 [提交 Issue](https://github.com/jiusi1-cpu/claude-private-browser-kit/issues) 或参与改进；不要上传令牌、代理凭据、真实出口 IP、浏览器资料和原始日志。
+
+觉得有用可以 Star 留作参考，也欢迎把 [中文介绍](docs/SHARE.zh-CN.md) 转给遇到同样问题的人。我们更需要可复现的反馈，而不是没有依据的“有效”“防封”结论。
+
+原创代码和文档采用 [MIT](LICENSE)，第三方边界见 [说明](THIRD_PARTY_NOTICES.md)。**非官方项目，与 Anthropic、Microsoft 无隶属关系。**
