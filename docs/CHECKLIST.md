@@ -8,6 +8,12 @@ Evidence should be a minimal redacted observation, test configuration/version, t
 
 ## P0: Scope and Recovery / 范围与恢复
 
+Optional browser check / 可选浏览器辅助检测：[Net.Coffee Claude AI IP 检测](https://ip.net.coffee/claude/).
+
+- [ ] Explain third-party IP/browser-data exposure before visiting, following the user's authorization and tool permissions. Do not embed or auto-run the site. / 访问前说明第三方将获得出口 IP 与可读取的浏览器信息，遵守用户授权及工具权限；不嵌入或自动执行。
+- [ ] Open in the intended dedicated executable/profile, record browser/version/time privately, and redact shared results. A link in the daily browser does not launch private Edge. / 在目标专用程序及资料目录中打开，私下记录版本和时间，分享前脱敏；普通链接不会自动切换浏览器。
+- [ ] Use IP/DNS/WebRTC/device observations only as supplemental evidence. Scores are third-party, not official Claude decisions or anti-ban proof; retain the controlled tests below. / 仅作出口、DNS、WebRTC 与设备信息的辅助观察；第三方评分不是官方风控结论或防封证明，仍须完成以下控制实验。
+
 - [ ] Record Windows/browser/Claude/Node/MCP versions and exact private local paths. / 记录版本和私有本机路径。
 - [ ] Confirm account/network authorization separately; no anti-ban or eligibility guarantee. / 服务资格独立确认，不作防封承诺。
 - [ ] Save HTTP/HTTPS UserChoice and callback command baseline privately. / 私下备份默认关联和回调命令。
