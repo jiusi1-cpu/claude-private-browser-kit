@@ -25,6 +25,11 @@ async function check(locale,link,reject){
   assert.equal(fs.readFileSync(path.join(root,'README.md'),'utf8'),fs.readFileSync(path.join(root,'README.zh-CN.md'),'utf8'));
   assert(html.includes('未验证降低封号率或避开平台检测'));
   assert(html.includes('Reduced ban rates and detection avoidance are unproven'));
+  const checkLinks=[...html.matchAll(/<a[^>]+href="https:\/\/ip\.net\.coffee\/claude\/"[^>]*>/g)];
+  assert.equal(checkLinks.length,2);
+  for(const [tag] of checkLinks)assert(tag.includes('rel="noopener noreferrer"'));
+  assert(html.includes('这里点击只会在当前浏览器新建标签'));
+  assert(html.includes('Not an official Claude test.'));
   for(const file of ['docs/SHARE.zh-CN.md','docs/SHARE.en.md'])assert(fs.readFileSync(path.join(root,file),'utf8').includes('LOCAL-CASE.md'));
   console.log('Agent handoff checks passed: bilingual prompts, exact copied contents, denied/missing clipboard fallback and entry links.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
