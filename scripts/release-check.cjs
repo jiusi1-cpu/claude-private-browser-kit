@@ -19,11 +19,11 @@ function walk(dir) {
     }
     files.push(rel);
     const data=fs.readFileSync(full);
-    if(rel==='assets/social-preview.png') {
+    if(['assets/social-preview.png','assets/social-preview-zh.png'].includes(rel)) {
       if(data.length>1000000 || data.subarray(0,8).toString('hex')!=='89504e470d0a1a0a') issues.push({file:rel,reason:'invalid or oversized preview PNG'});
       continue;
     }
-    if(!allowed.has(path.extname(entry.name))&&!['LICENSE','.gitignore'].includes(entry.name)&&rel!=='llms.txt') issues.push({file:rel,reason:'non-allowlisted file type'});
+    if(!allowed.has(path.extname(entry.name))&&!['LICENSE','.gitignore'].includes(entry.name)&&!['llms.txt','index.html','.nojekyll'].includes(rel)) issues.push({file:rel,reason:'non-allowlisted file type'});
     if(data.includes(0)) { issues.push({file:rel,reason:'binary data'}); continue; }
     const text=data.toString('utf8');
     if(/[A-Za-z]:[\\/]+Users[\\/]+[^\\/\s"']+/.test(text)) issues.push({file:rel,reason:'personal Windows home path'});
