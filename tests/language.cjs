@@ -6,7 +6,7 @@ assert.equal(scripts.length,2);
 function simulate(browser,saved,blocked=false){
   let change;
   const control={value:'',addEventListener:(name,fn)=>{assert.equal(name,'change');change=fn;}};
-  const document={documentElement:{dataset:{}},title:'',getElementById:()=>control,querySelector:()=>({content:''})};
+  const document={documentElement:{dataset:{}},title:'',getElementById:()=>control,querySelector:()=>({content:''}),querySelectorAll:()=>[]};
   const storage={value:saved,getItem(){if(blocked)throw Error('blocked');return this.value;},setItem(k,v){if(blocked)throw Error('blocked');assert.equal(k,'cpbk-language');this.value=v;}};
   const ctx=vm.createContext({navigator:{languages:[browser],language:browser},localStorage:storage,document});
   for(const script of scripts)vm.runInContext(script,ctx);
