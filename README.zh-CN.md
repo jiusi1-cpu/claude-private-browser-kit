@@ -1,14 +1,18 @@
 # Claude 专用浏览器工具包
 
-**给 Claude 一个专用浏览器，把日常浏览器留给自己。**
+**担心 Claude 账号风控？先把本机网络与浏览器环境理清。**
 
 [项目网站：自动选择中英文](https://jiusi1-cpu.github.io/claude-private-browser-kit/) · [English](README.en.md) · [完整中文指南](docs/GUIDE.zh-CN.md) · [检查清单](docs/CHECKLIST.md) · [反馈问题](https://github.com/jiusi1-cpu/claude-private-browser-kit/issues)
 
-Claude Private Browser Kit 是面向中文用户的 Windows 开源研究工具包：整理 Claude Desktop 的外部网页打开适配、独立 Edge 程序与资料目录、按应用路径约束网络，以及检查和回滚方法。
+Claude Private Browser Kit 面向中国用户及其他跨区域使用场景中关注账号限制的人群。它把可检查的本机问题拆开处理：浏览器资料混用、意外直连、DNS / WebRTC 暴露，以及桌面端和 MCP 入口不一致。让本地 AI Agent 执行环境自检、隔离配置、验收与回滚，而不是让用户自己研究脚本。
+
+**定位是环境自检与隔离，不是已经证实的“防封”技术。** 这些现象是否影响 Claude 风控、影响多大，现有证据无法确定；本项目不逆向或绕过平台检测，不改变服务使用资格。
 
 ![Claude 专用浏览器工具包：Claude 与日常软件分开使用浏览器](assets/social-preview-zh.png)
 
-**Windows · MIT 开源 · 中文优先 · 研究预览版**
+**Windows 本机案例已验证 · MIT 开源 · Agent 执行 · 研究预览版**
+
+**Windows 实测有效，具体指什么？** 2026-09-30 的本机案例验证了专用浏览器资料分离、外部链接分流、指定出口、IPv4 直连阻断及代理故障保护，并记录了 UDP / DNS / WebRTC 的限定实验。不是所有机器通用兼容，更不是降低封号率或规避检测的实验证明。查看 [实测项目与边界](docs/LOCAL-CASE.md)。
 
 > 当前交付是源码、参考脚本和验证文档，不是下载后双击就能完成配置的一键安装器。可以先运行只读检查，不必先修改系统。
 

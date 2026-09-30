@@ -2,7 +2,7 @@
   "schema": 1,
   "package": "claude-private-browser-kit",
   "version": "0.1.0-preview",
-  "createdAtUtc": "2026-09-30T17:28:16.8866997+00:00",
+  "createdAtUtc": "2026-09-30T17:59:22.7102523+00:00",
   "excludes": [
     "Vendor binaries",
     "Application archives",
@@ -74,8 +74,8 @@
     },
     {
       "path": "docs/LAUNCH.md",
-      "bytes": 5641,
-      "sha256": "f93da13de89c59cbc606c41398d055898b868adf003c34260255a720c594b7ec"
+      "bytes": 6120,
+      "sha256": "46439f1e62fc1537e92631a71a009faa2034fc9ff360a62a8ecbeb854a2736ec"
     },
     {
       "path": "docs/LOCAL-CASE.md",
@@ -98,9 +98,14 @@
       "sha256": "40c6f1a43b3b4d0d6730fe16d820ba9aa50d864d77091a6cb5b7721e1b02c725"
     },
     {
+      "path": "docs/SHARE.en.md",
+      "bytes": 3029,
+      "sha256": "9aee0f5fac9df0c8152bf77b9abb2cafe889baa5b920aeff8844e2845997b0e2"
+    },
+    {
       "path": "docs/SHARE.zh-CN.md",
-      "bytes": 3674,
-      "sha256": "de2a97fa875bc01eefed88677eb82c07aa1097cd9f59f785f3a47b927b482b96"
+      "bytes": 3755,
+      "sha256": "b40ae983005ca46317b33860349ba247bc0b4fdb928ba251b709910924c7449f"
     },
     {
       "path": "evidence/local-case.redacted.json",
@@ -139,8 +144,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 19022,
-      "sha256": "1e61f15049048fa730476415d4b1397f20d5f0c9e56c67466545a62c25a333f9"
+      "bytes": 19420,
+      "sha256": "497dabafd4a36d112f0542a3390498b650d4170dbd5cb3c931454c6d7537880b"
     },
     {
       "path": "LICENSE",
@@ -149,8 +154,8 @@
     },
     {
       "path": "llms.txt",
-      "bytes": 2226,
-      "sha256": "10653aebaa295447fddf94db52bb5bb9eb6be135e8872745218c6af16cc6da46"
+      "bytes": 2576,
+      "sha256": "4a0db3875faf0735adbee7c31bc0c2c632f462fe2b5a08bb0c6b6e0c53d0d747"
     },
     {
       "path": "package.json",
@@ -159,18 +164,18 @@
     },
     {
       "path": "README.en.md",
-      "bytes": 8452,
-      "sha256": "a4ea3527d5bfaaa29370e1fb0075cbeeafdd50b52e2c39d9ae3ea3a6e673dd54"
+      "bytes": 9372,
+      "sha256": "94b48956d344bc822bd9eaac38981c578977eea0de0ac71b07d01871d6e2fa15"
     },
     {
       "path": "README.md",
-      "bytes": 10046,
-      "sha256": "b1b0649342bb379a8f446d2929aa3d30e9f1a4277117c637635c174c464690af"
+      "bytes": 10829,
+      "sha256": "62c2a74b072f5ca1670508084533e4c941b58bffbd1de3692fec656177a081e5"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 10046,
-      "sha256": "b1b0649342bb379a8f446d2929aa3d30e9f1a4277117c637635c174c464690af"
+      "bytes": 10829,
+      "sha256": "62c2a74b072f5ca1670508084533e4c941b58bffbd1de3692fec656177a081e5"
     },
     {
       "path": "reference/Block-ClaudeBrowserBridge.ps1.example",
@@ -279,8 +284,8 @@
     },
     {
       "path": "tests/handoff.cjs",
-      "bytes": 2424,
-      "sha256": "e3b461c1f5949877caecf1885759860c0984769b4aeccb2679d6fc704b2e8c6f"
+      "bytes": 2724,
+      "sha256": "666a21e2084dda6120b123a9ede1bb466955e67f4d6da2ba8bdcca999d4cfea7"
     },
     {
       "path": "tests/language.cjs",

@@ -2,13 +2,17 @@
 
 [Website: Chinese / English](https://jiusi1-cpu.github.io/claude-private-browser-kit/) | [简体中文](README.zh-CN.md) | English
 
-**Give Claude its own browser. Keep yours.**
+**Concerned about Claude account restrictions? Start with your local environment.**
 
-Separate Claude Desktop's external links, browser profile, and proxy route on Windows, without replacing your daily default browser.
+For users in China and other cross-region setups concerned about account restrictions. Give a local AI agent the repository link to audit mixed browser profiles, unintended direct traffic, DNS / WebRTC exposure and inconsistent desktop/MCP routes, then configure, verify and document rollback.
+
+This is an environment-audit and separation toolkit, not proven anti-ban technology. Whether these conditions affect Claude enforcement, and by how much, is unknown. It does not reverse-engineer or bypass platform detection, or establish service eligibility.
 
 ![Claude Private Browser Kit architecture: a dedicated Claude browser route alongside the unchanged daily browser route](assets/social-preview.png)
 
-**Windows | MIT | Research preview | English / 简体中文**
+**Windows case tested | MIT | Agent-led setup | Research preview**
+
+**What does "tested on Windows" mean?** The 2026-09-30 local case verified dedicated browser data, external-link routing, configured egress, IPv4 direct-traffic blocking and proxy-failure protection, with bounded UDP / DNS / WebRTC experiments. This is not universal compatibility, measured ban reduction or proof of detection avoidance. See [test results and boundaries](docs/LOCAL-CASE.md).
 
 ## Give This Repository to Your AI Agent
 
@@ -48,6 +52,8 @@ An auditable case study and toolkit for giving Claude Desktop a dedicated browse
 This is not a fingerprint-spoofing product, an account-ban prevention guarantee, or a way to establish service eligibility. It does not hide an entire operating system from an agent with arbitrary code execution. Use only accounts, networks, and services you are authorized to access.
 
 ## Start Here
+
+- [English sharing copy and tested scope](docs/SHARE.en.md)
 
 - [Complete design and implementation logic](docs/GUIDE.en.md)
 - [Bilingual audit checklist](docs/CHECKLIST.md)

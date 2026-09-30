@@ -1,6 +1,6 @@
 # Claude Private Browser Kit
 
-> 面向中文用户的 Claude Desktop 专用浏览器研究工具包。Windows app-scoped external links, dedicated Edge profiles, WFP network controls and a read-only audit. Chinese-first documentation with an English overview.
+> 面向中国及其他跨区域场景中关注账号风控的用户，提供 Claude 环境自检、浏览器分离与网络限制。For users concerned about account restrictions: agent-led Windows environment auditing and separation, not proven anti-ban technology. Selected controls were tested in one Windows case; detection avoidance and reduced ban rates remain unproven.
 
 Unofficial. MIT covers original material only. Not a universal installer, full sandbox, fingerprint-spoofing tool, or account-ban prevention product. Static PASS is not proof of real traffic behavior. Fresh-machine deployment and authenticated model-driven workflows remain unverified. This repository-local index is a reading aid, not a discovery guarantee.
 
@@ -25,6 +25,9 @@ When a user gives this repository URL and asks for setup, start with these instr
 - [Security](SECURITY.md): threat boundaries and reporting.
 
 ## Optional
+
+- [中文宣传与实测范围](docs/SHARE.zh-CN.md): audience concerns versus verified local functionality.
+- [English sharing copy](docs/SHARE.en.md): Windows-case claims, evidence links and limits.
 
 - [Research evidence](docs/RESEARCH-X.md): community reports and uncertainty.
 - [Package map](docs/PACKAGE-MAP.md): source and excluded private/vendor material.
