@@ -23,5 +23,8 @@ async function check(locale,link,reject){
   for(const file of ['AGENTS.md','docs/AGENT-START.zh-CN.md','docs/AGENT-START.en.md'])assert(fs.existsSync(path.join(root,file)),file);
   for(const file of ['README.md','README.zh-CN.md','README.en.md','llms.txt'])assert(fs.readFileSync(path.join(root,file),'utf8').includes('AGENT-START.'),file);
   assert.equal(fs.readFileSync(path.join(root,'README.md'),'utf8'),fs.readFileSync(path.join(root,'README.zh-CN.md'),'utf8'));
+  assert(html.includes('未验证降低封号率或避开平台检测'));
+  assert(html.includes('Reduced ban rates and detection avoidance are unproven'));
+  for(const file of ['docs/SHARE.zh-CN.md','docs/SHARE.en.md'])assert(fs.readFileSync(path.join(root,file),'utf8').includes('LOCAL-CASE.md'));
   console.log('Agent handoff checks passed: bilingual prompts, exact copied contents, denied/missing clipboard fallback and entry links.');
 })().catch(error=>{console.error(error);process.exitCode=1;});
