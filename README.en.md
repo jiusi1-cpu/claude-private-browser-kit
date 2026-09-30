@@ -82,6 +82,16 @@ There is no global URL router in the deployed case. Browser Tamer was considered
 
 ## Read-only Checks for the Agent
 
+### Optional Third-party Browser Check
+
+[Open the Net.Coffee Claude AI IP checker](https://ip.net.coffee/claude/)
+
+Use this as a supplementary view of the current browser's egress IP, DNS, WebRTC and device information. Ask the agent to open it in the dedicated browser and compare before/after observations. A normal link click does not switch browsers; a daily-browser result does not establish the private browser or all Claude process routes.
+
+This is not an official Claude test. Its score is not Claude's internal risk decision or proof against bans. Visiting exposes your egress IP and readable browser information to the third-party site and its test services. We only link to it, with no embedded or automatic test. Do not submit passwords/tokens or publish screenshots containing IPs. Continue with [controlled live checks](docs/CHECKLIST.md).
+
+### Local Static Checks
+
 Requires Node.js 22 or newer. These commands use only built-in Node modules; no `npm install` is required.
 
 ```powershell

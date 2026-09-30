@@ -60,6 +60,16 @@ https://github.com/jiusi1-cpu/claude-private-browser-kit
 
 ## 给 Agent 的只读检查入口
 
+### 浏览器环境辅助检测（第三方）
+
+[打开 Net.Coffee Claude AI IP 检测](https://ip.net.coffee/claude/)
+
+用于辅助查看当前浏览器的出口 IP、DNS、WebRTC 与设备信息，对比配置前后的观察结果。**让 Agent 在本次专用浏览器中打开**；普通点击不会自动切换浏览器，日常 Edge 中的结果不能代表专用 Edge 或 Claude 全部进程。
+
+这是第三方工具，不是 Claude 官方检测；评分不等于 Claude 内部风控结论，也不证明不会封号。访问会向该站点及其检测服务暴露当前出口 IP 和可读取的浏览器信息。本项目只提供链接，不嵌入或自动运行检测；不要提交账号密码、令牌，也不要公开含 IP 的截图。它不能替代 [实际网络验收](docs/CHECKLIST.md)。
+
+### 本地静态检查
+
 以下是 Agent 使用的技术入口，用户无需逐条手动操作。Agent 必须先阅读实施手册，并按本机情况适配；仍需维护浏览器副本和应用补丁，不是未经验证的自动安装承诺。
 
 先克隆仓库，需要本机已有 Git 和 Node.js 22 或更新版本：

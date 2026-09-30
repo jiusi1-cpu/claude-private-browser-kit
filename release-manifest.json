@@ -2,7 +2,7 @@
   "schema": 1,
   "package": "claude-private-browser-kit",
   "version": "0.1.0-preview",
-  "createdAtUtc": "2026-09-30T17:59:22.7102523+00:00",
+  "createdAtUtc": "2026-09-30T18:13:55.2154906+00:00",
   "excludes": [
     "Vendor binaries",
     "Application archives",
@@ -59,8 +59,8 @@
     },
     {
       "path": "docs/CHECKLIST.md",
-      "bytes": 9017,
-      "sha256": "e5849cfa239111dc18086e8f6abb94e605de474207d43d811b59c8012b51a776"
+      "bytes": 10100,
+      "sha256": "7d5b2ac80315782b6672b6431aa09ce7be5c42755830b6f5ee95f2df9fccd6eb"
     },
     {
       "path": "docs/GUIDE.en.md",
@@ -144,8 +144,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 19420,
-      "sha256": "497dabafd4a36d112f0542a3390498b650d4170dbd5cb3c931454c6d7537880b"
+      "bytes": 21303,
+      "sha256": "e1b25effd56e843911e9538cf660b088ab58d1e68049c5aa4cd488c3e400722c"
     },
     {
       "path": "LICENSE",
@@ -164,18 +164,18 @@
     },
     {
       "path": "README.en.md",
-      "bytes": 9372,
-      "sha256": "94b48956d344bc822bd9eaac38981c578977eea0de0ac71b07d01871d6e2fa15"
+      "bytes": 10252,
+      "sha256": "34c8975480745680d04ac603bc10e24667c2716500523eeecd765c770f180af4"
     },
     {
       "path": "README.md",
-      "bytes": 10829,
-      "sha256": "62c2a74b072f5ca1670508084533e4c941b58bffbd1de3692fec656177a081e5"
+      "bytes": 11664,
+      "sha256": "69d3b0c956cd84fc172198bfdf3be289cba745d7cc2ab3d58d200c30f606d832"
     },
     {
       "path": "README.zh-CN.md",
-      "bytes": 10829,
-      "sha256": "62c2a74b072f5ca1670508084533e4c941b58bffbd1de3692fec656177a081e5"
+      "bytes": 11664,
+      "sha256": "69d3b0c956cd84fc172198bfdf3be289cba745d7cc2ab3d58d200c30f606d832"
     },
     {
       "path": "reference/Block-ClaudeBrowserBridge.ps1.example",
@@ -284,8 +284,8 @@
     },
     {
       "path": "tests/handoff.cjs",
-      "bytes": 2724,
-      "sha256": "666a21e2084dda6120b123a9ede1bb466955e67f4d6da2ba8bdcca999d4cfea7"
+      "bytes": 3077,
+      "sha256": "11fe43f2c2d03a46080bacb7470045561993c0b86f9e124b4004d3717d4c9079"
     },
     {
       "path": "tests/language.cjs",
