@@ -1,0 +1,110 @@
+param([switch]$CheckOnly,[switch]$NoDialog)
+$ErrorActionPreference = 'Stop'
+$root = $PSScriptRoot
+$mutex=$null
+$locked=$false
+function Read-Sha256([string]$path) {
+    $stream=[IO.File]::OpenRead($path)
+    $sha=[Security.Cryptography.SHA256]::Create()
+    try { return ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-','') } finally {$stream.Dispose();$sha.Dispose()}
+}
+function Repair-GuardShortcuts {
+    $shell=New-Object -ComObject WScript.Shell
+    foreach($entry in $manifest.Shortcuts){
+        if($entry.DirectLaunch){continue}
+        if(-not (Test-Path -LiteralPath $entry.Path)){continue}
+        $shortcut=$shell.CreateShortcut($entry.Path)
+        $shortcut.TargetPath="$env:WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe"
+        $shortcut.Arguments='-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "'+$root+'\Launch-ClaudeGuard.ps1"'
+        $shortcut.WorkingDirectory=$root
+        $shortcut.IconLocation=$manifest.ClaudePath+',0'
+        $shortcut.Save()
+    }
+}
+try {
+    $mutex=New-Object Threading.Mutex($false, ('Local\ClaudeGuardLaunch-'+[Security.Principal.WindowsIdentity]::GetCurrent().User.Value))
+    try {$locked=$mutex.WaitOne(0)} catch [Threading.AbandonedMutexException] {$locked=$true}
+    if(-not $locked){Write-Output 'A protected launch is already in progress.'; return}
+    if(-not $CheckOnly){[ordered]@{AtUtc=[DateTimeOffset]::UtcNow.ToString('o');Status='Checking';Launcher=$PSCommandPath}|ConvertTo-Json|Set-Content "$root\logs\last-launch.json" -Encoding UTF8}
+    $manifest = Get-Content "$root\manifest.json" -Raw | ConvertFrom-Json
+    Add-Type -Path "$root\ClaudeGuardWfp.cs"
+    foreach ($entry in $manifest.Rules) {
+        if (-not [ClaudeGuardWfp]::Verify($entry.Path, [uint16]$entry.Port)) { throw "Protection missing: $($entry.Path)" }
+    }
+    foreach ($entry in $manifest.Hashes) {
+        if ((Read-Sha256 $entry.Path) -ne $entry.Hash) { throw "File changed; protection must be reviewed: $($entry.Path)" }
+    }
+    $policy = Get-ItemProperty 'HKCU:\Software\Policies\Claude'
+    if ($policy.egressProxyUrl -ne 'http://127.0.0.1:18791' -or $policy.egressProxyPacUrl) {
+        throw 'The managed fixed proxy is missing or a PAC override is present.'
+    }
+    foreach ($name in @('disableAutoUpdates')) {
+        if ($policy.$name -ne 1) { throw "Required policy missing: $name" }
+    }
+    foreach ($name in @('secureVmFeaturesEnabled','isClaudeCodeForDesktopEnabled','isDesktopExtensionEnabled','isDesktopExtensionDirectoryEnabled','isLocalDevMcpEnabled')) {
+        if ($policy.$name -ne 1) { throw "Required policy missing: $name" }
+    }
+    $existing = @(Get-CimInstance Win32_Process -Filter "Name='Claude.exe'" | Where-Object { $_.CommandLine -notmatch ' --type=' })
+    foreach($process in $existing){
+        if(-not [ClaudeGuardWfp]::SameFile($process.ExecutablePath,$manifest.ClaudePath) -or $process.CommandLine -notmatch '--proxy-server=http://127\.0\.0\.1:18791(?:\s|$)'){
+            throw 'An unrecognized Claude instance is running. Close it manually before protected launch.'
+        }
+    }
+    $proxy = Get-Process -Name claude-proxy -ErrorAction SilentlyContinue | Where-Object { [ClaudeGuardWfp]::SameFile($_.Path,"$root\claude-proxy.exe") }
+    if (-not $proxy) { & "$root\Start-Proxy.ps1"; Start-Sleep -Seconds 2 }
+    . "$root\Test-FixedExit.ps1"
+    $exitIp=Test-FixedExit -Expected $manifest.ExpectedExit -Probe {
+        $oldPreference=$ErrorActionPreference
+        $ErrorActionPreference='Continue'
+        try {
+            $ip=& "$root\guard-probe.exe" --silent --show-error --connect-timeout 8 --max-time 15 --proxy http://127.0.0.1:18791 https://api.ipify.org 2> "$root\logs\preflight-error.log"
+            [pscustomobject]@{ExitCode=$LASTEXITCODE;Ip=([string]$ip).Trim()}
+        } finally {$ErrorActionPreference=$oldPreference}
+    }
+    if($CheckOnly){
+        [ordered]@{AtUtc=[DateTimeOffset]::UtcNow.ToString('o');Status='PreflightPassed';ExitIp=$exitIp;ExistingMainCount=$existing.Count}|ConvertTo-Json|Set-Content "$root\logs\last-check.json" -Encoding UTF8
+        Write-Output "Preflight passed: $exitIp. No Claude process was launched or stopped."
+        return
+    }
+    foreach ($item in @(Get-ChildItem Env: | Where-Object { $_.Name -match '^(CLAUDE_|ANTHROPIC_|ELECTRON_)|^NODE_OPTIONS$' })) { Remove-Item -LiteralPath "Env:$($item.Name)" }
+    $env:HTTP_PROXY = 'http://127.0.0.1:18791'
+    $env:HTTPS_PROXY = $env:HTTP_PROXY
+    $env:ALL_PROXY = $env:HTTP_PROXY
+    $env:NO_PROXY = ''
+    $arguments = @('--proxy-server=http://127.0.0.1:18791', '--disable-quic', '--dns-prefetch-disable', '--force-webrtc-ip-handling-policy=disable_non_proxied_udp')
+    if($manifest.ProfilePath){$arguments += '--user-data-dir="'+$manifest.ProfilePath+'"'}
+    if($existing.Count){
+        Start-Process -FilePath $manifest.ClaudePath -ArgumentList $arguments -WindowStyle Normal
+        Repair-GuardShortcuts
+        $visible=$false
+        for($i=0;$i -lt 20;$i++){
+            Start-Sleep -Milliseconds 500
+            $running=Get-Process -Id $existing[0].ProcessId -ErrorAction SilentlyContinue
+            if($running -and $running.MainWindowHandle -ne 0){$visible=$true;break}
+        }
+        if(-not $visible){throw 'Claude is running but no main window appeared. No session was terminated.'}
+        [ordered]@{AtUtc=[DateTimeOffset]::UtcNow.ToString('o');Status='WindowDetected';Mode='Reopen';Pid=$existing[0].ProcessId;ExitIp=$exitIp;Path=$manifest.ClaudePath}|ConvertTo-Json|Set-Content "$root\logs\last-launch.json" -Encoding UTF8
+        return
+    }
+    $p = Start-Process -FilePath $manifest.ClaudePath -ArgumentList $arguments -WindowStyle Normal -PassThru -RedirectStandardOutput "$root\logs\claude-out.log" -RedirectStandardError "$root\logs\claude-error.log"
+    $visible=$false
+    for($i=0;$i -lt 40;$i++){
+        Start-Sleep -Milliseconds 500
+        $p.Refresh()
+        if($p.HasExited){throw "Claude exited during startup: $($p.ExitCode). See logs/claude-error.log."}
+        if($p.MainWindowHandle -ne 0){$visible=$true;break}
+    }
+    if(-not $visible){throw 'Claude started but no main window appeared within 20 seconds.'}
+    Repair-GuardShortcuts
+    [ordered]@{ AtUtc=[DateTimeOffset]::UtcNow.ToString('o'); Status='WindowDetected'; Mode='ColdStart'; Pid=$p.Id; ExitIp=([string]$exitIp).Trim(); Path=$manifest.ClaudePath } | ConvertTo-Json | Set-Content "$root\logs\last-launch.json" -Encoding UTF8
+} catch {
+    [ordered]@{ AtUtc=[DateTimeOffset]::UtcNow.ToString('o'); Status='Blocked'; Reason=$_.Exception.Message } | ConvertTo-Json | Set-Content "$root\logs\last-launch.json" -Encoding UTF8
+    if(-not $NoDialog){
+        Add-Type -AssemblyName System.Windows.Forms
+        [System.Windows.Forms.MessageBox]::Show("Protected launch was blocked. Existing sessions were not closed.`r`n`r`n$($_.Exception.Message)", 'Claude Network Guard') | Out-Null
+    }
+    throw
+} finally {
+    if($locked -and $mutex){$mutex.ReleaseMutex()}
+    if($mutex){$mutex.Dispose()}
+}

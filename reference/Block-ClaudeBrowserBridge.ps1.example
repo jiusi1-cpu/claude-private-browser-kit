@@ -1,0 +1,31 @@
+$ErrorActionPreference = 'Stop'
+$backup = 'C:\Example\Local\ClaudeNetworkGuard\backup\environment-20260930-214138'
+$ids = @('dihbgbndebgnbjfmelmegjepbnkhlgni','fcoeoabgfenejglbffodgkkbkcdhcgfn','dngcpimnedloihjnnfngkgjoidhnaolf')
+$snapshots = @()
+foreach ($browser in @('Google\Chrome','Microsoft\Edge')) {
+    $root = "HKCU:\Software\Policies\$browser"
+    $rootExisted = Test-Path $root
+    $old = if ($rootExisted) { Get-ItemProperty $root } else { $null }
+    $hasSettings = $old -and $old.PSObject.Properties.Name -contains 'ExtensionSettings'
+    $block = "$root\NativeMessagingBlocklist"
+    $hadBlock = Test-Path $block
+    $oldBlock = if ($hadBlock) { Get-ItemProperty $block | Select-Object * -ExcludeProperty PS* } else { $null }
+    $snapshots += [ordered]@{ Root = $root; RootExisted = [bool]$rootExisted; HadExtensionSettings = [bool]$hasSettings; ExtensionSettings = $old.ExtensionSettings; HadNativeMessagingBlocklist = $hadBlock; NativeMessagingBlocklist = $oldBlock }
+}
+$snapshots | ConvertTo-Json -Depth 8 | Set-Content "$backup\browser-policy-before.json" -Encoding utf8
+foreach ($snapshot in $snapshots) {
+    $root = $snapshot.Root
+    New-Item -Path $root -Force | Out-Null
+    $settings = if ($snapshot.HadExtensionSettings) { $snapshot.ExtensionSettings | ConvertFrom-Json } else { [pscustomobject]@{} }
+    foreach ($id in $ids) { $settings | Add-Member -NotePropertyName $id -NotePropertyValue ([pscustomobject]@{ installation_mode = 'blocked' }) -Force }
+    New-ItemProperty -Path $root -Name ExtensionSettings -PropertyType String -Value ($settings | ConvertTo-Json -Depth 20 -Compress) -Force | Out-Null
+    $block = "$root\NativeMessagingBlocklist"
+    New-Item -Path $block -Force | Out-Null
+    $current = Get-ItemProperty $block
+    if (@($current.PSObject.Properties.Value) -notcontains 'com.anthropic.claude_browser_extension') {
+        $index = 1
+        while ($current.PSObject.Properties.Name -contains "$index") { $index++ }
+        New-ItemProperty -Path $block -Name "$index" -PropertyType String -Value 'com.anthropic.claude_browser_extension' -Force | Out-Null
+    }
+    [pscustomobject]@{ Browser = $root; BlockedExtensions = $ids; BlockedNativeHost = 'com.anthropic.claude_browser_extension' }
+}

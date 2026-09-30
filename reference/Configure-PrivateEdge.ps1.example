@@ -1,0 +1,55 @@
+$ErrorActionPreference = 'Stop'
+$root = 'C:\Example\Local\ClaudePrivateEdge'
+$guard = 'C:\Example\Local\ClaudeNetworkGuard'
+Add-Type -Path "$guard\ClaudeGuardWfp.cs"
+$files = @(Get-ChildItem "$root\Application" -Recurse -File -Filter '*.exe')
+$rules = @($files | ForEach-Object { [pscustomobject]@{ Path = $_.FullName; Port = $(if ($_.Name -ieq 'msedge.exe') { 18791 } else { 0 }) } })
+$installed = @()
+try {
+    foreach ($entry in $rules) {
+        [ClaudeGuardWfp]::Install($entry.Path, [uint16]$entry.Port)
+        $installed += $entry
+        if (-not [ClaudeGuardWfp]::Verify($entry.Path, [uint16]$entry.Port)) { throw "Rule verification failed: $($entry.Path)" }
+    }
+} catch {
+    foreach ($entry in $installed) { [ClaudeGuardWfp]::Remove($entry.Path, [uint16]$entry.Port) }
+    throw
+}
+$args = @(
+    '--user-data-dir="' + $root + '\Profile"',
+    '--profile-directory=Default',
+    '--proxy-server=http://127.0.0.1:18791',
+    '--disable-quic', '--dns-prefetch-disable',
+    '--force-webrtc-ip-handling-policy=disable_non_proxied_udp',
+    '--host-resolver-rules="MAP * ~NOTFOUND, EXCLUDE 127.0.0.1"',
+    '--no-first-run', '--no-default-browser-check', '--disable-sync',
+    '--disable-features=msImplicitSignin', '--disable-background-networking',
+    '--lang=en-US'
+)
+$shortcutPath = Join-Path ([Environment]::GetFolderPath('Desktop')) 'Claude - Private Edge.lnk'
+if (Test-Path $shortcutPath) { throw 'Shortcut already exists; refusing to replace without review.' }
+$shell = New-Object -ComObject WScript.Shell
+$shortcut = $shell.CreateShortcut($shortcutPath)
+$shortcut.TargetPath = "$root\Application\msedge.exe"
+$shortcut.Arguments = ($args -join ' ') + ' https://claude.ai/'
+$shortcut.WorkingDirectory = "$root\Application"
+$shortcut.Description = 'Dedicated Claude browser. Separate profile and fixed proxy. Ordinary Edge is unchanged.'
+$shortcut.Save()
+$manifest = [ordered]@{
+    CreatedAt = [DateTimeOffset]::Now.ToString('o')
+    Version = '154.0.4258.37'
+    Executable = "$root\Application\msedge.exe"
+    Profile = "$root\Profile"
+    Shortcut = $shortcutPath
+    Arguments = $args
+    ExpectedExit = '[REDACTED_EXIT_IP]'
+    Rules = $rules
+    SignatureStatus = (Get-AuthenticodeSignature "$root\Application\msedge.exe").Status.ToString()
+    SourceExeHash = (Get-FileHash 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe').Hash
+    PrivateExeHash = (Get-FileHash "$root\Application\msedge.exe").Hash
+    BrowserControlPaired = $false
+    UpdateMode = 'Independent copy; explicitly refresh and verify rules when the installed Edge version changes.'
+}
+$manifest | ConvertTo-Json -Depth 8 | Set-Content "$root\manifest.json" -Encoding utf8
+$manifest | ConvertTo-Json -Depth 8 | Set-Content (Join-Path (Split-Path $PSScriptRoot) 'outputs\private-edge-configuration.json') -Encoding utf8
+[pscustomobject]@{ Executable = $manifest.Executable; Profile = $manifest.Profile; RuleCount = $rules.Count; Signature = $manifest.SignatureStatus; Shortcut = $shortcutPath } | ConvertTo-Json

@@ -1,0 +1,17 @@
+$ErrorActionPreference = 'Stop'
+$root=$PSScriptRoot
+function Read-Sha256([string]$path) {
+    $stream=[IO.File]::OpenRead($path)
+    $sha=[Security.Cryptography.SHA256]::Create()
+    try { return ([BitConverter]::ToString($sha.ComputeHash($stream))).Replace('-','') } finally {$stream.Dispose();$sha.Dispose()}
+}
+$manifest=Get-Content "$root\manifest.json" -Raw | ConvertFrom-Json
+Add-Type -Path "$root\ClaudeGuardWfp.cs" -ErrorAction SilentlyContinue
+$rule=$manifest.Rules | Where-Object {$_.Path -eq "$root\claude-proxy.exe"}
+if(@($rule).Count -ne 1){throw 'Expected one rule for the actual proxy executable.'}
+if(-not [ClaudeGuardWfp]::Verify($rule.Path,11719)){throw 'Proxy protection missing; refusing to start.'}
+foreach($entry in $manifest.Hashes | Where-Object {$_.Path -like '*\claude-proxy.exe' -or $_.Path -like '*\config.yaml'}){
+    if((Read-Sha256 $entry.Path) -ne $entry.Hash){throw 'Proxy configuration changed; refusing to start.'}
+}
+if(Get-Process claude-proxy -ErrorAction SilentlyContinue | Where-Object {[ClaudeGuardWfp]::SameFile($_.Path,"$root\claude-proxy.exe")}){return}
+Start-Process "$root\claude-proxy.exe" -ArgumentList @('-d',('"'+$root+'\runtime"'),'-f',('"'+$root+'\runtime\config.yaml"')) -WindowStyle Hidden -RedirectStandardOutput "$root\logs\proxy-out.log" -RedirectStandardError "$root\logs\proxy-error.log"

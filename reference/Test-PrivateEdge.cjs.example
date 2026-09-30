@@ -1,0 +1,72 @@
+const fs = require('node:fs');
+const path = require('node:path');
+const { chromium } = require('playwright');
+const root = 'C:/Example/Local/ClaudePrivateEdge';
+const output = path.resolve('outputs');
+const args = [
+  '--no-first-run', '--no-default-browser-check', '--disable-sync',
+  '--disable-features=msImplicitSignin', '--disable-quic', '--dns-prefetch-disable',
+  '--force-webrtc-ip-handling-policy=disable_non_proxied_udp',
+  '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1',
+  '--disable-background-networking'
+];
+async function launch(profile, proxy) {
+  return chromium.launchPersistentContext(profile, {
+    executablePath: root + '/Application/msedge.exe', headless: false, chromiumSandbox: true,
+    viewport: { width: 1100, height: 780 }, locale: 'en-US',
+    args: [...args.filter(arg => proxy || !arg.startsWith('--host-resolver-rules=')), proxy ? '--proxy-server=' + proxy : '--no-proxy-server'],
+    ignoreDefaultArgs: ['--disable-extensions']
+  });
+}
+(async () => {
+  if (process.argv[2] === '--dns-check') {
+    const context = await launch(root + '/Profile', 'http://127.0.0.1:18791');
+    try {
+      const page = await context.newPage();
+      const response = await page.goto('http://' + process.argv[3] + '/', { timeout: 15000 });
+      console.log('BROWSER_HTTP_STATUS=' + response.status());
+    } finally { await context.close(); }
+    return;
+  }
+  const result = { checkedAt: new Date().toISOString(), tests: [], scope: 'Actual dedicated Edge executable and dedicated profile; no Claude account or extension pairing.' };
+  let context;
+  try {
+    context = await launch(root + '/Profile', 'http://127.0.0.1:18791');
+    const page = await context.newPage();
+    await page.goto('https://api.ipify.org', { timeout: 25000 });
+    const ip = (await page.locator('body').innerText()).trim();
+    result.tests.push({ name: 'Dedicated Edge fixed exit', pass: ip === '[REDACTED_EXIT_IP]', ip });
+    await page.screenshot({ path: output + '/private-edge-ip.png' });
+    await page.goto('about:blank');
+    const rtc = await page.evaluate(async () => {
+      const candidates = [];
+      const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+      pc.onicecandidate = event => { if (event.candidate) candidates.push(event.candidate.candidate); };
+      pc.createDataChannel('audit');
+      await pc.setLocalDescription(await pc.createOffer());
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      pc.close();
+      return { candidates, language: navigator.language, languages: navigator.languages };
+    });
+    result.tests.push({ name: 'No ICE candidates with public STUN server', pass: rtc.candidates.length === 0, ...rtc });
+    result.note = 'No candidates in this test is not proof that the WebRTC API has been removed.';
+    await context.close(); context = null;
+    for (const [name, profile, proxy, url] of [
+      ['Direct literal-IP HTTPS blocked', 'direct', null, 'https://1.1.1.1/'],
+      ['Missing proxy does not fall back', 'offline', 'http://127.0.0.1:18792', 'https://api.ipify.org/'],
+      ['Direct IPv6 blocked', 'ipv6', null, 'https://[2606:4700:4700::1111]/']
+    ]) {
+      context = await launch(path.resolve('work/edge-test-' + profile), proxy);
+      const testPage = context.pages()[0] || await context.newPage();
+      let error = null;
+      try { await testPage.goto(url, { timeout: 9000 }); } catch (e) { error = String(e.message).split('\n')[0]; }
+      result.tests.push({ name, pass: !!error && /ERR_NETWORK_ACCESS_DENIED|ERR_PROXY_CONNECTION_FAILED|ERR_TUNNEL_CONNECTION_FAILED|ERR_CONNECTION_CLOSED|ERR_ADDRESS_UNREACHABLE/.test(error), error });
+      await context.close(); context = null;
+    }
+  } finally {
+    if (context) await context.close();
+    fs.writeFileSync(output + '/private-edge-verification.json', JSON.stringify(result, null, 2));
+  }
+  console.log(JSON.stringify(result, null, 2));
+  if (result.tests.some(test => !test.pass)) process.exitCode = 1;
+})().catch(e => { console.error(e.message); process.exitCode = 1; });

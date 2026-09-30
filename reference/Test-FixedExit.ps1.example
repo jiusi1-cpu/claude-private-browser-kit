@@ -1,0 +1,19 @@
+function Test-FixedExit {
+    param(
+        [Parameter(Mandatory=$true)][string]$Expected,
+        [Parameter(Mandatory=$true)][scriptblock]$Probe,
+        [ValidateRange(1,5)][int]$Attempts=3,
+        [ValidateRange(0,10)][int]$RetryDelaySeconds=2
+    )
+    for($attempt=1; $attempt -le $Attempts; $attempt++) {
+        $result=& $Probe
+        $ip=([string]$result.Ip).Trim()
+        if($result.ExitCode -eq 0 -and $ip -eq $Expected){return $ip}
+        $address=$null
+        if($result.ExitCode -eq 0 -and [Net.IPAddress]::TryParse($ip,[ref]$address)) {
+            throw "Unexpected exit IP $ip. Refusing to continue."
+        }
+        if($attempt -lt $Attempts -and $RetryDelaySeconds){Start-Sleep -Seconds $RetryDelaySeconds}
+    }
+    throw 'Fixed exit unavailable after bounded retries. No alternate route was used.'
+}

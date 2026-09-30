@@ -1,0 +1,54 @@
+const { spawn } = require('node:child_process');
+const { createInterface } = require('node:readline');
+const fs = require('node:fs');
+const root = 'C:/Example/Local/ClaudePrivateEdge';
+const child = spawn(root + '/mcp/node.exe', [root + '/mcp/guarded-mcp.cjs'], { windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });
+const waiting = new Map();
+let seq = 0;
+let stderr = '';
+child.stderr.on('data', data => { stderr += data.toString(); });
+createInterface({ input: child.stdout }).on('line', line => {
+  const message = JSON.parse(line);
+  if (message.method && message.id !== undefined) {
+    const result = message.method === 'roots/list' ? {roots: []} : {};
+    child.stdin.write(JSON.stringify({jsonrpc:'2.0',id:message.id,result}) + '\n');
+    return;
+  }
+  const resolve = waiting.get(message.id);
+  if (resolve) { waiting.delete(message.id); resolve(message); }
+});
+function call(method, params = {}) {
+  return new Promise((resolve, reject) => {
+    const id = ++seq;
+    const timer = setTimeout(() => { waiting.delete(id); reject(new Error('MCP timeout: ' + method)); }, 35000);
+    waiting.set(id, result => { clearTimeout(timer); resolve(result); });
+    child.stdin.write(JSON.stringify({ jsonrpc: '2.0', id, method, params }) + '\n');
+  });
+}
+(async () => {
+  const result = { checkedAt: new Date().toISOString(), tests: [], scope: 'Real MCP stdio handshake and tools; not a Claude model session.' };
+  try {
+    const init = await call('initialize', { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'local-verifier', version: '1' } });
+    result.tests.push({ name: 'MCP initialize', pass: !!init.result?.serverInfo, server: init.result?.serverInfo });
+    child.stdin.write(JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) + '\n');
+    const list = await call('tools/list');
+    const names = list.result.tools.map(tool => tool.name);
+    result.tools = names;
+    result.tests.push({ name: 'Unsafe code and alternate browser installation absent', pass: !names.includes('browser_run_code_unsafe') && !names.includes('browser_install') });
+    const denied = await call('tools/call', { name: 'browser_run_code_unsafe', arguments: { code: '() => 1' } });
+    result.tests.push({ name: 'Unadvertised unsafe call rejected', pass: denied.error?.code === -32601 });
+    const navigation = await call('tools/call', { name: 'browser_navigate', arguments: { url: 'https://api.ipify.org' } });
+    result.tests.push({ name: 'MCP launches and navigates dedicated Edge', pass: !navigation.error && !navigation.result?.isError, detail: navigation.error ?? navigation.result?.content });
+    const evaluate = await call('tools/call', { name: 'browser_evaluate', arguments: { function: '() => ({ip:document.body.innerText.trim(),language:navigator.language})' } });
+    const text = JSON.stringify(evaluate.result);
+    result.tests.push({ name: 'MCP browser reports fixed exit', pass: !evaluate.result?.isError && text.includes('[REDACTED_EXIT_IP]'), detail: evaluate.result?.content });
+    await call('tools/call', { name: 'browser_close', arguments: {} });
+  } finally {
+    child.stdin.end();
+    await Promise.race([new Promise(resolve => child.once('exit', resolve)), new Promise(resolve => setTimeout(() => { child.kill(); resolve(); }, 3000))]);
+    result.stderr = stderr;
+    fs.writeFileSync('outputs/private-edge-mcp-verification.json', JSON.stringify(result, null, 2));
+  }
+  console.log(JSON.stringify(result, null, 2));
+  if (result.tests.some(test => !test.pass)) process.exitCode = 1;
+})().catch(e => { console.error(e.message); child.kill(); process.exitCode = 1; });

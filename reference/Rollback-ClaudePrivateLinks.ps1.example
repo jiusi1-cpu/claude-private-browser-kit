@@ -1,0 +1,19 @@
+$ErrorActionPreference = 'Stop'
+$record = Get-Content -LiteralPath (Join-Path $PSScriptRoot 'private-links-patch-record.json') -Raw | ConvertFrom-Json
+$targets = @(
+    @{ Source = 'Claude.exe'; Target = $record.exePath; Before = $record.before.exe; After = $record.after.exe },
+    @{ Source = 'app.asar'; Target = $record.asarPath; Before = $record.before.asar; After = $record.after.asar },
+    @{ Source = 'manifest.json'; Target = $record.manifestPath; Before = $record.before.manifest; After = $record.after.manifest }
+)
+foreach ($item in $targets) {
+    $backup = Join-Path $record.backup $item.Source
+    if ((Get-FileHash -LiteralPath $backup -Algorithm SHA256).Hash -ne $item.Before) { throw 'Backup hash mismatch; refusing rollback.' }
+    if ((Get-FileHash -LiteralPath $item.Target -Algorithm SHA256).Hash -ne $item.After) { throw 'A target changed after patching; review before rollback.' }
+}
+$running = @(Get-CimInstance Win32_Process -Filter "Name = 'Claude.exe'" | Where-Object { $_.ExecutablePath -eq $record.exePath })
+if ($running.Count) { throw 'Exit Claude Desktop before running rollback. Browsers need not be closed.' }
+foreach ($item in $targets) {
+    Copy-Item -LiteralPath (Join-Path $record.backup $item.Source) -Destination $item.Target -Force
+    if ((Get-FileHash -LiteralPath $item.Target -Algorithm SHA256).Hash -ne $item.Before) { throw 'Restore verification failed.' }
+}
+Write-Output 'Restored Claude executable, app archive, and guard manifest. Windows browser defaults and browser profiles were not changed.'

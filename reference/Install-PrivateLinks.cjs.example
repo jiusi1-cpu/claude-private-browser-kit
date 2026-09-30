@@ -1,0 +1,98 @@
+'use strict';
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const assert = require('node:assert/strict');
+const root = path.join(process.env.LOCALAPPDATA, 'Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local');
+const app = path.join(root, 'AnthropicClaude/app-2.9939.2');
+const guard = path.join(root, 'ClaudeNetworkGuard');
+const privateRoot = path.join(root, 'ClaudePrivateEdge');
+const exePath = path.join(app, 'Claude.exe');
+const asarPath = path.join(app, 'resources/app.asar');
+const manifestPath = path.join(guard, 'manifest.json');
+const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
+const oldAsar = fs.readFileSync(asarPath);
+const oldExe = fs.readFileSync(exePath);
+const oldManifest = fs.readFileSync(manifestPath);
+const headerBytes = oldAsar.subarray(16, 16 + oldAsar.readUInt32LE(12));
+const header = JSON.parse(headerBytes);
+const data = oldAsar.subarray(8 + oldAsar.readUInt32LE(4));
+const build = header.files['.vite'].files.build.files;
+assert(!build['claude-private-links.cjs'], 'Adapter already installed; do not double patch');
+const oldPre = build['index.pre.js'];
+const originalPre = data.subarray(Number(oldPre.offset), Number(oldPre.offset) + oldPre.size);
+const config = {
+  root: privateRoot,
+  executable: path.join(privateRoot, 'Application/msedge.exe'),
+  profile: path.join(privateRoot, 'Profile')
+};
+assert(fs.existsSync(config.executable) && fs.existsSync(config.profile));
+const prefix = Buffer.from('"use strict";require("./claude-private-links.cjs").install(require("electron"),' + JSON.stringify(config) + ');\n');
+const newPre = Buffer.concat([prefix, originalPre]);
+const adapter = fs.readFileSync(path.join(__dirname, 'claude-private-links.cjs'));
+function entry(bytes, offset) {
+  const blockSize = 4194304, blocks = [];
+  for (let i = 0; i < bytes.length; i += blockSize) blocks.push(sha(bytes.subarray(i, i + blockSize)));
+  return { size: bytes.length, offset: String(offset), integrity: { algorithm: 'SHA256', hash: sha(bytes), blockSize, blocks } };
+}
+build['index.pre.js'] = entry(newPre, data.length);
+build['claude-private-links.cjs'] = entry(adapter, data.length + newPre.length);
+const json = Buffer.from(JSON.stringify(header));
+const pickle = Buffer.alloc(8 + Math.ceil(json.length / 4) * 4);
+pickle.writeUInt32LE(pickle.length - 4, 0);
+pickle.writeUInt32LE(json.length, 4);
+json.copy(pickle, 8);
+const sizePickle = Buffer.alloc(8);
+sizePickle.writeUInt32LE(4, 0);
+sizePickle.writeUInt32LE(pickle.length, 4);
+const newAsar = Buffer.concat([sizePickle, pickle, data, newPre, adapter]);
+const integrityRecord = Buffer.from(JSON.stringify([{ file: 'resources\\app.asar', alg: 'SHA256', value: sha(headerBytes) }]));
+const recordOffset = oldExe.indexOf(integrityRecord);
+assert(recordOffset >= 0 && oldExe.indexOf(integrityRecord, recordOffset + 1) === -1, 'Expected unique embedded ASAR digest');
+const newExe = Buffer.from(oldExe);
+const newRecord = Buffer.from(JSON.stringify([{ file: 'resources\\app.asar', alg: 'SHA256', value: sha(json) }]));
+assert.equal(newRecord.length, integrityRecord.length);
+newRecord.copy(newExe, recordOffset);
+const fuse = Buffer.from('dL7pKGdnNz796PbbjQWNKmHXBZaB9tsX');
+const fi = oldExe.indexOf(fuse);
+assert(fi >= 0);
+assert.deepEqual(newExe.subarray(fi, fi + 43), oldExe.subarray(fi, fi + 43), 'Electron security fuses must remain unchanged');
+const manifest = JSON.parse(oldManifest.toString().replace(/^\uFEFF/, ''));
+let updated = false;
+for (const item of manifest.Hashes) {
+  if (path.resolve(item.Path).toLowerCase() === exePath.toLowerCase()) {
+    assert.equal(item.Hash.toLowerCase(), sha(oldExe), 'Existing guard executable hash must match');
+    item.Hash = sha(newExe).toUpperCase(); updated = true;
+  }
+}
+assert(updated);
+const backup = path.join(guard, 'backup', 'private-links-' + new Date().toISOString().replace(/[:.]/g, '-'));
+fs.mkdirSync(backup, { recursive: true });
+fs.writeFileSync(path.join(backup, 'Claude.exe'), oldExe, { flag: 'wx' });
+fs.writeFileSync(path.join(backup, 'app.asar'), oldAsar, { flag: 'wx' });
+fs.writeFileSync(path.join(backup, 'manifest.json'), oldManifest, { flag: 'wx' });
+const record = {
+  appliedAt: new Date().toISOString(), backup, exePath, asarPath, manifestPath,
+  before: { exe: sha(oldExe), asar: sha(oldAsar), manifest: sha(oldManifest) },
+  after: { exe: sha(newExe), asar: sha(newAsar), manifest: null },
+  unchangedFuses: true, defaultAssociationsModified: false,
+  signatureBefore: 'HashMismatch (pre-existing)',
+  adapterSourceHash: sha(adapter)
+};
+const manifestBytes = Buffer.from(JSON.stringify(manifest, null, 2));
+record.after.manifest = sha(manifestBytes);
+fs.writeFileSync(path.join(backup, 'patch-record.json'), JSON.stringify(record, null, 2));
+try {
+  fs.writeFileSync(asarPath, newAsar);
+  fs.writeFileSync(exePath, newExe);
+  fs.writeFileSync(manifestPath, manifestBytes);
+  assert.equal(sha(fs.readFileSync(exePath)), record.after.exe);
+  assert.equal(sha(fs.readFileSync(asarPath)), record.after.asar);
+} catch (error) {
+  fs.writeFileSync(asarPath, oldAsar);
+  fs.writeFileSync(exePath, oldExe);
+  fs.writeFileSync(manifestPath, oldManifest);
+  throw error;
+}
+fs.writeFileSync(path.resolve('outputs/private-links-patch-record.json'), JSON.stringify(record, null, 2));
+console.log(JSON.stringify({ installed: true, backup, unchangedFuses: true }));

@@ -1,0 +1,71 @@
+$ErrorActionPreference = 'Stop'
+$root = 'C:\Example\Local\ClaudeNetworkGuard'
+$manifest = Get-Content "$root\manifest.json" -Raw | ConvertFrom-Json
+Add-Type -Path "$root\ClaudeGuardWfp.cs"
+$probe = (Resolve-Path "$PSScriptRoot\network-probe.exe").Path
+$result = [ordered]@{ CheckedAt = [DateTimeOffset]::Now.ToString('o'); Scope = 'Existing WFP rules plus an isolated probe with the same rule template; not an authenticated Cowork test'; Tests = @() }
+function Test-Socket([string]$Name, [string]$Mode, [string]$Address, [int]$Port, [bool]$Allowed) {
+    $text = & $probe $Mode $Address $Port
+    $exit = $LASTEXITCODE
+    $pass = if ($Allowed) { $exit -eq 0 -and $text -eq 'ALLOWED' } else { $exit -eq 1 -and $text -match 'SOCKET_ERROR=10013;' }
+    $script:result.Tests += [ordered]@{ Name = $Name; Pass = [bool]$pass; Detail = "$text" }
+}
+function Test-Curl([string]$Name, [bool]$ThroughProxy, [bool]$ExpectedSuccess) {
+    $args = @('--silent', '--show-error', '--connect-timeout', '3', '--max-time', '8')
+    if ($ThroughProxy) { $args += @('--proxy', 'http://127.0.0.1:18791') } else { $args += @('--noproxy', '*') }
+    $args += 'https://api.ipify.org'
+    $old = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try { $text = & "$root\guard-probe.exe" @args 2>&1; $code = $LASTEXITCODE } finally { $ErrorActionPreference = $old }
+    $pass = if ($ExpectedSuccess) { $code -eq 0 -and "$text".Trim() -eq $manifest.ExpectedExit } else { $code -ne 0 }
+    $script:result.Tests += [ordered]@{ Name = $Name; Pass = [bool]$pass; ExitCode = $code; Detail = "$text" }
+}
+function Test-UdpDelivery {
+    [ClaudeGuardWfp]::Remove($probe, 18791)
+    $listener = [Net.Sockets.UdpClient]::new([Net.IPEndPoint]::new([Net.IPAddress]::Loopback, 0))
+    $port = $listener.Client.LocalEndPoint.Port
+    try {
+        $receive = $listener.ReceiveAsync()
+        $baselineSend = & $probe udp 127.0.0.1 $port
+        $baseline = $receive.Wait(1000)
+        if (-not $baseline) { throw 'UDP receiver baseline failed; block test would be inconclusive.' }
+        [ClaudeGuardWfp]::Install($probe, $port)
+        $receive = $listener.ReceiveAsync()
+        $protectedSend = & $probe udp 127.0.0.1 $port
+        $delivered = $receive.Wait(1500)
+        $script:result.Tests += [ordered]@{ Name = 'UDP delivery blocked, positive receiver baseline'; Pass = $baseline -and -not $delivered; UnprotectedReceived = $baseline; ProtectedReceived = $delivered; Detail = 'UDP send return values do not prove delivery. Receiver used the same filter template with an ephemeral allowed port.' }
+    } finally {
+        $listener.Dispose()
+        [ClaudeGuardWfp]::Remove($probe, $port)
+        [ClaudeGuardWfp]::Install($probe, 18791)
+    }
+}
+try {
+    [ClaudeGuardWfp]::Install($probe, 18791)
+    Test-Socket 'Allow exact local TCP proxy' tcp '127.0.0.1' 18791 $true
+    Test-Socket 'Deny alternate local TCP proxy' tcp '127.0.0.1' 11719 $false
+    Test-Socket 'Deny direct public TCP' tcp '1.1.1.1' 443 $false
+    Test-UdpDelivery
+    Test-Socket 'Deny IPv6 loopback' tcp '::1' 18791 $false
+    Test-Curl 'Fixed exit before outage' $true $true
+    $running = @(Get-Process claude-proxy -ErrorAction SilentlyContinue | Where-Object { [ClaudeGuardWfp]::SameFile($_.Path, "$root\claude-proxy.exe") })
+    try {
+        $running | Stop-Process -Force
+        Start-Sleep -Milliseconds 400
+        Test-Curl 'Proxy unavailable fails closed' $true $false
+        Test-Curl 'Direct route remains blocked during outage' $false $false
+    } finally {
+        & "$root\Start-Proxy.ps1"
+        Start-Sleep -Seconds 2
+    }
+    Test-Curl 'Fixed exit restored after outage' $true $true
+    $result.ExistingRulesPresent = @($manifest.Rules | ForEach-Object { [ClaudeGuardWfp]::Verify($_.Path, [uint16]$_.Port) }) -notcontains $false
+} finally {
+    [ClaudeGuardWfp]::Remove($probe, 18791)
+    $result.TemporaryProbeRulesRemoved = -not [ClaudeGuardWfp]::Verify($probe, 18791)
+    $out = Join-Path (Split-Path $PSScriptRoot) 'outputs'
+    New-Item -ItemType Directory -Path $out -Force | Out-Null
+    $result | ConvertTo-Json -Depth 6 | Set-Content "$out\network-verification.json" -Encoding utf8
+}
+$result | ConvertTo-Json -Depth 6
+if ($result.Tests.Pass -contains $false) { throw 'One or more network checks failed.' }

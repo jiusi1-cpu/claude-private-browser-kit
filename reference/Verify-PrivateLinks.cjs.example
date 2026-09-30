@@ -1,0 +1,64 @@
+'use strict';
+const fs = require('node:fs');
+const crypto = require('node:crypto');
+const path = require('node:path');
+const assert = require('node:assert/strict');
+const readJson = p => JSON.parse(fs.readFileSync(p, 'utf8').replace(/^\uFEFF/, ''));
+const sha = b => crypto.createHash('sha256').update(b).digest('hex');
+const record = readJson('outputs/private-links-patch-record.json');
+const before = readJson('work/private-links-before.json');
+const after = readJson('work/private-links-final.json');
+const smoke = readJson('outputs/private-links-live-smoke.json');
+const checks = [];
+for (const scheme of ['http', 'https']) {
+  assert.deepEqual(after.Associations[scheme], before.Associations[scheme]);
+  checks.push(scheme + ' UserChoice unchanged, including Windows hash');
+}
+assert.equal(after.Associations.claude.toLowerCase(), before.Associations.claude.toLowerCase());
+checks.push('Claude callback executable and arguments unchanged (case-insensitive Windows path)');
+const dailyBefore = before.EdgeMainProcesses.filter(p => !p.PrivateProfile);
+const dailyAfter = after.EdgeMainProcesses.filter(p => !p.PrivateProfile);
+assert.deepEqual(dailyAfter, dailyBefore);
+checks.push('Existing daily Edge main process unchanged');
+const privateProcess = after.EdgeMainProcesses.filter(p => p.PrivateProfile);
+assert.equal(privateProcess.length, 1);
+assert.equal(privateProcess[0].Parent, smoke.pid);
+assert.equal(smoke.webLaunches, 1);
+assert.equal(smoke.failures, 0);
+checks.push('Real Claude shell.openExternal diagnostic launched dedicated Edge directly');
+const b = fs.readFileSync(record.asarPath);
+const raw = b.subarray(16, 16 + b.readUInt32LE(12));
+const header = JSON.parse(raw);
+const base = 8 + b.readUInt32LE(4);
+let verifiedEntries = 0;
+function walk(files) {
+  for (const v of Object.values(files)) {
+    if (v.files) walk(v.files);
+    else if (!v.unpacked && v.offset !== undefined && v.integrity) {
+      assert.equal(sha(b.subarray(base + Number(v.offset), base + Number(v.offset) + v.size)), v.integrity.hash);
+      verifiedEntries++;
+    }
+  }
+}
+walk(header.files);
+const exe = fs.readFileSync(record.exePath);
+assert(exe.includes(Buffer.from(JSON.stringify([{file:'resources\\app.asar',alg:'SHA256',value:sha(raw)}]))));
+assert.equal(sha(exe), record.after.exe);
+assert.equal(sha(b), record.after.asar);
+checks.push('All ' + verifiedEntries + ' packed-entry integrity hashes and embedded ASAR header digest verified');
+const oldExe = fs.readFileSync(path.join(record.backup, 'Claude.exe'));
+const fuse = Buffer.from('dL7pKGdnNz796PbbjQWNKmHXBZaB9tsX');
+const fi = exe.indexOf(fuse);
+assert.deepEqual(exe.subarray(fi, fi + 43), oldExe.subarray(fi, fi + 43));
+checks.push('Electron security fuses unchanged');
+const rollback = readJson('outputs/private-links-rollback-verification.json');
+assert(rollback.RestoredExe && rollback.RestoredArchive && rollback.RestoredManifest);
+checks.push('Actual rollback restored all three original hashes before reinstallation');
+const status = readJson(path.join(path.dirname(path.dirname(record.manifestPath)), 'ClaudePrivateEdge/external-links-status.json'));
+assert.equal(status.lastStatus, 'installed');
+assert.notEqual(status.pid, smoke.pid);
+checks.push('Adapter loaded again through original desktop shortcut without diagnostic flag');
+const result = {checkedAt:new Date().toISOString(), passed:checks.length, checks,
+  limits:['User login/OAuth completion not exercised','New browser page body could not be read by window tool; fixed exit not retested in this turn','Does not restrict arbitrary Claude Code child processes','Local patch requires revalidation after app updates']};
+fs.writeFileSync('outputs/private-links-verification.json', JSON.stringify(result,null,2));
+console.log(JSON.stringify(result,null,2));

@@ -1,0 +1,48 @@
+param([switch]$PrivateEdge)
+$ErrorActionPreference = 'Stop'
+$id = [Guid]::NewGuid().ToString('N').Substring(0, 12)
+$session = "ClaudeDnsAudit-$id"
+$etl = Join-Path $PSScriptRoot "$session.etl"
+$baselineName = "baseline-$id.example.com"
+$proxyName = "proxy-$id.1-1-1-1.sslip.io"
+$guard = 'C:\Example\Local\ClaudeNetworkGuard\guard-probe.exe'
+& logman.exe create trace $session -p Microsoft-Windows-DNS-Client 0xffffffffffffffff 5 -o $etl -ets | Out-Null
+if ($LASTEXITCODE -ne 0) { throw 'Could not start an isolated DNS trace.' }
+try {
+    Start-Sleep -Seconds 1
+    Resolve-DnsName $baselineName -DnsOnly -QuickTimeout -ErrorAction SilentlyContinue | Out-Null
+    $old = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        if ($PrivateEdge) {
+            $proxyResult = & node.exe "$PSScriptRoot\Test-PrivateEdge.cjs" --dns-check $proxyName 2>&1
+        } else {
+            $proxyResult = & $guard --silent --show-error --head --connect-timeout 8 --max-time 15 --proxy http://127.0.0.1:18791 "http://$proxyName/" 2>&1
+        }
+        $proxyExit = $LASTEXITCODE
+    } finally { $ErrorActionPreference = $old }
+    Start-Sleep -Seconds 1
+} finally {
+    & logman.exe stop $session -ets | Out-Null
+}
+$events = @(Get-WinEvent -Path $etl -Oldest -ErrorAction SilentlyContinue)
+$baseline = @($events | Where-Object { $_.ToXml().Contains($baselineName) })
+$proxied = @($events | Where-Object { $_.ToXml().Contains($proxyName) })
+$claudeIds = @(Get-Process Claude -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Id)
+$claudeEvents = @($events | Where-Object { $_.ProcessId -in $claudeIds })
+$report = [ordered]@{
+    CheckedAt = [DateTimeOffset]::Now.ToString('o')
+    TotalTraceEvents = $events.Count
+    Scope = $(if ($PrivateEdge) { 'Actual dedicated Edge browsing a unique wildcard hostname through fixed HTTP proxy, with positive Windows DNS resolver baseline.' } else { 'Unique wildcard hostname through the protected HTTP proxy, compared with a positive Windows DNS resolver baseline. Not a built-in-browser DNS leak test.' })
+    BaselineDnsEvents = $baseline.Count
+    ProxiedHostnameDnsEvents = $proxied.Count
+    ProxyExitCode = $proxyExit
+    ProxyResponse = "$proxyResult"
+    ObservationPass = ($baseline.Count -gt 0 -and $proxied.Count -eq 0 -and $proxyExit -eq 0 -and "$proxyResult" -match 'HTTP/1.[01] (200|301|302|400|403)|BROWSER_HTTP_STATUS=(200|301|302|400|403)')
+    ClaudeProcessDnsEventsDuringWindow = $claudeEvents.Count
+}
+$outName = if ($PrivateEdge) { 'outputs\private-edge-dns-verification.json' } else { 'outputs\dns-verification.json' }
+$report | ConvertTo-Json -Depth 4 | Set-Content (Join-Path (Split-Path $PSScriptRoot) $outName) -Encoding utf8
+$report | ConvertTo-Json -Depth 4
+# Retain only the task-specific aggregate; the trace may include unrelated DNS names.
+Remove-Item -LiteralPath $etl
