@@ -1,0 +1,13 @@
+{
+  "name": "claude-private-browser-kit",
+  "version": "0.1.0-preview",
+  "private": true,
+  "description": "Windows app-scoped browser routing, network isolation reference code, and evidence-based audit checklists",
+  "license": "MIT",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "test": "node tests/private-links.cjs && node tests/audit.cjs",
+    "audit:local": "node scripts/audit.cjs",
+    "check:release": "node scripts/release-check.cjs"
+  }
+}

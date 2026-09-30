@@ -1,0 +1,21 @@
+# Claude Private Browser Kit
+
+> Windows research toolkit for Claude Desktop: process-local external-link routing, a dedicated Edge executable and profile, app-path WFP restrictions, and a read-only audit.
+
+Unofficial. MIT covers original material only. Not a universal installer, full sandbox, fingerprint-spoofing tool, or account-ban prevention product. Static PASS is not proof of real traffic behavior. Fresh-machine deployment and authenticated model-driven workflows remain unverified. This repository-local index is a reading aid, not a discovery guarantee.
+
+## Documentation
+
+- [English overview](README.md): purpose, safe commands, code map and limitations.
+- [中文概览](README.zh-CN.md): 用途、检查入口与边界。
+- [Design guide](docs/GUIDE.en.md): implementation logic and rollback.
+- [中文完整指南](docs/GUIDE.zh-CN.md): 完整思路与实现逻辑。
+- [Audit checklist](docs/CHECKLIST.md): static versus live verification.
+- [Local case](docs/LOCAL-CASE.md): redacted historical results, not a fresh deployment.
+- [Security](SECURITY.md): threat boundaries and reporting.
+
+## Optional
+
+- [Research evidence](docs/RESEARCH-X.md): community reports and uncertainty.
+- [Package map](docs/PACKAGE-MAP.md): source and excluded private/vendor material.
+- [Contributing](CONTRIBUTING.md): reproducible, privacy-preserving reports.

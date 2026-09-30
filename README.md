@@ -1,0 +1,110 @@
+# Claude Private Browser Kit
+
+[简体中文](README.zh-CN.md) | English
+
+**Give Claude its own browser. Keep yours.**
+
+Separate Claude Desktop's external links, browser profile, and proxy route on Windows, without replacing your daily default browser.
+
+![Claude Private Browser Kit architecture: a dedicated Claude browser route alongside the unchanged daily browser route](assets/social-preview.png)
+
+**Windows | MIT | Research preview | English / 简体中文**
+
+## Why This Exists
+
+Claude opens a link. Your everyday browser appears, with your everyday profile. Changing the Windows default browser would affect every other app too.
+
+This project documents a narrower approach: an application-local link adapter, a dedicated Edge copy and profile, and app-path network restrictions. It includes original source, a read-only auditor, reproducible checklists, and rollback references.
+
+- **Scoped routing:** Claude's external web links go to its dedicated browser in the tested case.
+- **Separate browser data:** a dedicated executable and profile, with independent update maintenance.
+- **Evidence, not a green badge:** static checks distinguish PASS, FAIL, and UNVERIFIED; live network tests remain explicit.
+
+**This is a source and documentation package, not a universal installer.** Start with the safe checks below before adapting the implementation.
+
+An auditable case study and toolkit for giving Claude Desktop a dedicated browser executable, separate browser data, a controlled proxy route, and a narrowly scoped external-link adapter without replacing the Windows default browser.
+
+This is not a fingerprint-spoofing product, an account-ban prevention guarantee, or a way to establish service eligibility. It does not hide an entire operating system from an agent with arbitrary code execution. Use only accounts, networks, and services you are authorized to access.
+
+## Start Here
+
+- [Complete design and implementation logic](docs/GUIDE.en.md)
+- [Bilingual audit checklist](docs/CHECKLIST.md)
+- [X research, contradictory reports, and evidence limits](docs/RESEARCH-X.md)
+- [Sanitized local test results and unverified areas](docs/LOCAL-CASE.md)
+- [Security boundaries](SECURITY.md)
+- [What is packaged and what is deliberately excluded](docs/PACKAGE-MAP.md)
+- [Pre-publication checklist](docs/RELEASE.md)
+- [Concise documentation index for agents](llms.txt)
+- [Contributing and reproducible reports](CONTRIBUTING.md)
+
+## Architecture
+
+```text
+Claude Desktop external HTTP(S) link
+  -> process-local shell.openExternal adapter
+  -> dedicated Edge executable + dedicated profile
+  -> app-path WFP restrictions
+  -> loopback TCP proxy -> authorized upstream proxy -> Internet
+
+Claude browser MCP -> private Node, stdio -> same dedicated Edge/profile
+Other Windows applications -> original Windows URL associations -> daily browser
+```
+
+There is no global URL router in the deployed case. Browser Tamer was considered and rejected because a global default-handler architecture would also receive links from unrelated applications.
+
+## Safe Local Checks
+
+Requires Node.js 22 or newer. These commands use only built-in Node modules; no `npm install` is required.
+
+```powershell
+npm test
+npm run check:release
+node scripts/audit.cjs --config examples/audit.example.json
+```
+
+The last command intentionally returns **UNVERIFIED, exit 2**, because example paths are not a configured environment. Create a local `audit.local.json` with your actual paths, then pass that file. It is gitignored. Do not publish it.
+
+The auditor is read-only and makes no network requests. It can compare paths and hashes, inspect the package hook, and flag missing resources. It cannot establish real traffic behavior, successful login, or account safety. Read [the checklist](docs/CHECKLIST.md) before interpreting any PASS.
+
+## Code Layout
+
+| Path | Purpose |
+| --- | --- |
+| `src/private-links.cjs` | Original process-local external-link adapter, with no system default changes |
+| `src/ClaudeGuardWfp.cs` | Original Windows Filtering Platform helper, x64/admin required for rule changes |
+| `src/NetworkProbe.cs` | Controlled TCP/UDP probe source, not a prebuilt executable |
+| `src/guarded-mcp.cjs` | Original stdio tool allowlist around a separately installed Playwright MCP |
+| `scripts/audit.cjs` | Read-only static environment audit |
+| `scripts/release-check.cjs` | Source-package hygiene and local Markdown-link checks |
+| `reference/*.example` | Redacted implementation scripts requiring manual adaptation, not executable entry points |
+| `examples/` | Non-working placeholder configurations, without credentials |
+| `evidence/` | Minimal historical test summaries, without private paths or exit IP |
+
+## What Was Actually Tested
+
+The original local case used Claude Desktop `2.9939.2`, Edge `154.0.4258.37`, and Playwright MCP `0.0.83`. It exercised direct-route blocking, proxy outage recovery, UDP delivery with a positive control, DNS observations with a positive control, browser/MCP egress, external-link routing, and an actual patch rollback. The public export is not a fresh-machine deployment test. Login and authenticated Claude model-driven MCP workflows remain unverified in the retained evidence.
+
+## Important Tradeoffs
+
+- Patching application files invalidates vendor trust assumptions. The case already had an invalid executable signature before this adapter. Updating ASAR digests does not restore Authenticode.
+- The patch retained Electron security fuse bytes; it did not disable package-integrity checks.
+- The private browser is a real separate copy and needs its own update maintenance. Do not freeze an old browser indefinitely.
+- A separate profile under the same Windows user is not a VM or a full filesystem isolation boundary.
+- Manual browser use and MCP share a profile. Close the manual instance before starting an MCP-managed instance.
+- WFP `Verify` is a presence/basic-metadata check, not a complete predicate or live network proof.
+- No time-zone changes, global proxy changes, account actions, or GitHub publication are performed by the safe commands above.
+
+## License and Status
+
+[MIT](LICENSE) for original material only; see [third-party boundaries](THIRD_PARTY_NOTICES.md). Unofficial and not affiliated with Anthropic or Microsoft. The npm `private` flag prevents accidental npm publication; it does not prevent hosting source on GitHub.
+
+## FAQ
+
+**Does this change the Windows default browser?** No global URL router was deployed in the documented case. The adapter is scoped to Claude's process.
+
+**Is a separate Edge profile a security sandbox?** No. It separates browser data, not arbitrary filesystem access by code running as the same Windows user.
+
+**Does it guarantee a fixed IP or prevent account bans?** No. Exit stability depends on your authorized upstream service and must be measured. No account-safety or region-eligibility guarantee is made.
+
+**Can an AI agent understand this repository?** Start with [llms.txt](llms.txt), then the guide and checklist. This is a navigation aid, not a claim of crawler indexing or AI recommendation.
