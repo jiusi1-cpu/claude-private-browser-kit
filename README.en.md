@@ -1,6 +1,6 @@
 # Claude Private Browser Kit
 
-[简体中文](README.zh-CN.md) | English
+[Website: Chinese / English](https://jiusi1-cpu.github.io/claude-private-browser-kit/) | [简体中文](README.zh-CN.md) | English
 
 **Give Claude its own browser. Keep yours.**
 

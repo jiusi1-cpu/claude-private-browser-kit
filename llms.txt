@@ -6,6 +6,8 @@ Unofficial. MIT covers original material only. Not a universal installer, full s
 
 ## Documentation
 
+- [Project website](https://jiusi1-cpu.github.io/claude-private-browser-kit/): browser-language selection for Chinese and English, with a persistent manual override.
+
 - [English overview](README.en.md): purpose, safe commands, code map and limitations.
 - [中文概览](README.zh-CN.md): 用途、检查入口与边界。
 - [Design guide](docs/GUIDE.en.md): implementation logic and rollback.

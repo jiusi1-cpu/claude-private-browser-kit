@@ -2,7 +2,7 @@
 
 **给 Claude 一个专用浏览器，把日常浏览器留给自己。**
 
-[English](README.en.md) · [完整中文指南](docs/GUIDE.zh-CN.md) · [检查清单](docs/CHECKLIST.md) · [反馈问题](https://github.com/jiusi1-cpu/claude-private-browser-kit/issues)
+[项目网站：自动选择中英文](https://jiusi1-cpu.github.io/claude-private-browser-kit/) · [English](README.en.md) · [完整中文指南](docs/GUIDE.zh-CN.md) · [检查清单](docs/CHECKLIST.md) · [反馈问题](https://github.com/jiusi1-cpu/claude-private-browser-kit/issues)
 
 Claude Private Browser Kit 是面向中文用户的 Windows 开源研究工具包：整理 Claude Desktop 的外部网页打开适配、独立 Edge 程序与资料目录、按应用路径约束网络，以及检查和回滚方法。
 

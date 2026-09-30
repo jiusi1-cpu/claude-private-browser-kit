@@ -2,7 +2,7 @@
     "schema":  1,
     "package":  "claude-private-browser-kit",
     "version":  "0.1.0-preview",
-    "createdAtUtc":  "2026-09-30T16:51:38.9346063+00:00",
+    "createdAtUtc":  "2026-09-30T16:56:03.1873338+00:00",
     "excludes":  [
                      "Vendor binaries",
                      "Application archives",
@@ -124,8 +124,8 @@
                   },
                   {
                       "path":  "index.html",
-                      "bytes":  15007,
-                      "sha256":  "608f7889eefcac1fbd7e5d895f2dd64ecafdd1bbd5cbe98ab03515e97f45a083"
+                      "bytes":  15047,
+                      "sha256":  "c37abcd554fac757f44465cbc3d993ab4cb1f65ef77ad8b7f38738133ea4ffda"
                   },
                   {
                       "path":  "LICENSE",
@@ -134,8 +134,8 @@
                   },
                   {
                       "path":  "llms.txt",
-                      "bytes":  1415,
-                      "sha256":  "23f5db2acb2377873ce7450d60005680c2742f9d6e8f336e680608c2c0b4438e"
+                      "bytes":  1582,
+                      "sha256":  "e0f033e06e09aece58a8cb9274d6752748299cf5a1568880534fe8c5ac6d66d6"
                   },
                   {
                       "path":  "package.json",
@@ -144,18 +144,18 @@
                   },
                   {
                       "path":  "README.en.md",
-                      "bytes":  7088,
-                      "sha256":  "fab012616328a242e164d6b43146d7ce19455a0445782d13e05db2e0744f964f"
+                      "bytes":  7177,
+                      "sha256":  "52c2698ed71bf2c8604994a67636376e90ce2efdbae45a95f6ba00091b205674"
                   },
                   {
                       "path":  "README.md",
-                      "bytes":  8615,
-                      "sha256":  "2f6d2fa3fde9f6e35b0af42bd926a59b8d40f1618405d50dc89273597fe6ec1e"
+                      "bytes":  8715,
+                      "sha256":  "b6021d764396d70801b67375aa8b3001789d1cc3797f9bc2e080d33363deadf8"
                   },
                   {
                       "path":  "README.zh-CN.md",
-                      "bytes":  8615,
-                      "sha256":  "2f6d2fa3fde9f6e35b0af42bd926a59b8d40f1618405d50dc89273597fe6ec1e"
+                      "bytes":  8715,
+                      "sha256":  "b6021d764396d70801b67375aa8b3001789d1cc3797f9bc2e080d33363deadf8"
                   },
                   {
                       "path":  "reference/Block-ClaudeBrowserBridge.ps1.example",
