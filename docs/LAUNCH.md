@@ -1,6 +1,6 @@
 # Launch Notes / 发布文案与发现策略
 
-Prepared 2026-09-30. A publishing plan, not evidence of publication, indexing, adoption or popularity.
+Updated 2026-10-01. The repository is public. This document describes positioning and distribution, not proof of indexing, adoption or popularity. [中文转发文案](SHARE.zh-CN.md).
 
 ## Positioning / 定位
 
@@ -16,7 +16,7 @@ Target Windows users of Claude Desktop who need app-specific external-link routi
 
 Name: `claude-private-browser-kit`
 
-Description: Give Claude its own browser. Keep yours. Windows toolkit for app-scoped links, dedicated Edge profiles, WFP network controls and read-only audits. EN/ZH.
+Description: 给 Claude 一个专用浏览器，把日常浏览器留给自己。Windows 开源研究工具包：独立 Edge、应用内链接适配、按程序路径约束网络、只读检查与回滚参考。中文指南 / English。
 
 Suggested topics: `claude-desktop`, `windows`, `browser-isolation`, `microsoft-edge`, `mcp`, `playwright`, `privacy`, `proxy`, `windows-filtering-platform`, `network-security`, `dns`, `webrtc`, `electron`, `powershell`.
 
@@ -40,7 +40,7 @@ Claude 一打开网页，为什么就要跳进我日常使用的浏览器？
 
 包含原创源码、只读检查器、中英文指南、真实网络验收清单和回滚参考。当前是研究预览版，不是一键安装器，也不是完整安全沙箱。欢迎提供全新 Windows 环境的复现反馈。
 
-Append the actual repository URL only after publication. These drafts are not automatically posted to X or other communities.
+Repository: https://github.com/jiusi1-cpu/claude-private-browser-kit . These drafts are not automatically posted to X or other communities.
 
 ## Discovery Plan / 如何被发现
 
