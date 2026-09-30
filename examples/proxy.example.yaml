@@ -1,0 +1,22 @@
+# TEMPLATE ONLY. TEST-NET is not a working proxy; supply your own authorized service.
+# Never commit the completed configuration. Store it outside this repository.
+mixed-port: 18791
+bind-address: 127.0.0.1
+allow-lan: false
+mode: rule
+ipv6: false
+log-level: warning
+dns:
+  enable: false
+tun:
+  enable: false
+proxies:
+  - name: fixed-exit
+    type: socks5
+    server: 192.0.2.10
+    port: 1080
+    username: CHANGE_ME
+    password: CHANGE_ME
+    udp: false
+rules:
+  - MATCH,fixed-exit

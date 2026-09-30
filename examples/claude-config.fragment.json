@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "claude-private-edge": {
+      "command": "C:/Example/PrivateEdge/mcp/node.exe",
+      "args": ["C:/Example/PrivateEdge/mcp/guarded-mcp.cjs"]
+    }
+  },
+  "preferences": {
+    "chromeExtensionEnabled": false,
+    "coworkPreferredBrowser": "built_in",
+    "coworkBrowserToolsEnabled": false
+  }
+}

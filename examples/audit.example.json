@@ -1,0 +1,9 @@
+{
+  "claudeExe": "C:/Example/Claude/Claude.exe",
+  "appAsar": "C:/Example/Claude/resources/app.asar",
+  "privateEdgeExe": "C:/Example/PrivateEdge/Application/msedge.exe",
+  "privateProfile": "C:/Example/PrivateEdge/Profile",
+  "dailyEdgeExe": "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+  "dailyProfile": "C:/Example/DailyEdge/User Data",
+  "guardManifest": "C:/Example/Guard/manifest.json"
+}
