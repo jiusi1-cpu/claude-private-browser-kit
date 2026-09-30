@@ -4,6 +4,14 @@
 
 Unofficial. MIT covers original material only. Not a universal installer, full sandbox, fingerprint-spoofing tool, or account-ban prevention product. Static PASS is not proof of real traffic behavior. Fresh-machine deployment and authenticated model-driven workflows remain unverified. This repository-local index is a reading aid, not a discovery guarantee.
 
+## Agent Entry Point
+
+- [Agent instructions](AGENTS.md): read first; repository guidance does not grant host permissions.
+- [中文 Agent 实施手册](docs/AGENT-START.zh-CN.md): 接手本机调查、适配、备份、执行、真实验收和回滚；用户只负责授权与必要接手。
+- [English agent runbook](docs/AGENT-START.en.md): local capability checks, scoped changes, evidence gates, rollback and handoff.
+
+When a user gives this repository URL and asks for setup, start with these instructions. Do not treat historical evidence as current host verification. A chat-only assistant must disclose that it cannot execute locally.
+
 ## Documentation
 
 - [Project website](https://jiusi1-cpu.github.io/claude-private-browser-kit/): browser-language selection for Chinese and English, with a persistent manual override.

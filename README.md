@@ -12,6 +12,26 @@ Claude Private Browser Kit 是面向中文用户的 Windows 开源研究工具�
 
 > 当前交付是源码、参考脚本和验证文档，不是下载后双击就能完成配置的一键安装器。可以先运行只读检查，不必先修改系统。
 
+## 直接交给 AI Agent
+
+不需要先学会配置脚本。把这个仓库链接交给**能操作你本机文件和终端的 AI Agent**，并告诉它“帮我配置”。推荐复制下面这段，执行范围更清楚：
+
+```text
+请帮我在这台 Windows 电脑上配置 Claude 专用浏览器：
+https://github.com/jiusi1-cpu/claude-private-browser-kit
+
+先读 AGENTS.md 和 docs/AGENT-START.zh-CN.md，再检查本机环境。
+在我授权的范围内，完成版本适配、备份、实施、实际验收和回滚说明。
+不要修改系统默认浏览器、日常浏览器资料、全局网络或时区。
+不要盲跑历史示例，不要上传私人配置。
+需要登录、提权或扩大改动范围时由我接手。
+最后区分已通过、失败和未验证；不能操作本机时先说明，不要假装执行。
+```
+
+[网站一键复制指令](https://jiusi1-cpu.github.io/claude-private-browser-kit/) · [Agent 中文实施手册](docs/AGENT-START.zh-CN.md) · [Agent English runbook](docs/AGENT-START.en.md)
+
+你负责授权和登录，Agent 负责调查、适配与验证。普通网页聊天 AI 如果没有本机工具，只能解释方案，不能替你完成配置。**AI 接手不等于通用一键安装，也不等于已验证兼容你的机器。**
+
 ## 你可能也遇到过
 
 - Claude 打开网页，跳进的却是你平时使用的 Edge。
@@ -34,9 +54,9 @@ Claude Private Browser Kit 是面向中文用户的 Windows 开源研究工具�
 
 **不提供账号、代理节点或所谓“干净 IP”；不承诺防封号，也不宣称隐藏所有地区信号。** 这里只讨论你有权使用的账号、网络与服务。项目不会修改系统时区。
 
-## 先花五分钟，看看是否适合你
+## 给 Agent 的只读检查入口
 
-适合愿意阅读文档、理解 Windows 网络规则，并能针对自己环境适配的用户。只想双击安装、不愿维护浏览器副本或应用补丁的用户，暂时不适合直接部署这套参考方案。
+以下是 Agent 使用的技术入口，用户无需逐条手动操作。Agent 必须先阅读实施手册，并按本机情况适配；仍需维护浏览器副本和应用补丁，不是未经验证的自动安装承诺。
 
 先克隆仓库，需要本机已有 Git 和 Node.js 22 或更新版本：
 
@@ -102,7 +122,7 @@ Claude 浏览器 MCP
 - `src/NetworkProbe.cs`：TCP/UDP 控制实验探针源码。
 - `src/guarded-mcp.cjs`：围绕独立安装的 Playwright MCP 的工具白名单；不是完整安全边界。
 - `scripts/audit.cjs`：不联网的只读静态检查器。
-- `reference/*.example`：需人工适配的脱敏历史实施脚本。
+- `reference/*.example`：需由 Agent 审查并按本机适配的脱敏历史实施脚本，不是可直接执行的安装器。
 - `examples/`、`evidence/`：无真实节点的示例与最小化历史证据。
 
 ## 验证到哪一步了？

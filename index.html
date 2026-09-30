@@ -23,7 +23,7 @@
       document.documentElement.dataset.lang=lang;
     }());
   </script>
-  <style>html[data-lang="en"] [data-language="zh"],html[data-lang="zh"] [data-language="en"]{display:none}</style>
+  <style>html[data-lang="en"] [data-language="zh"],html[data-lang="zh"] [data-language="en"]{display:none}.handoff{margin:22px 0 0;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.handoff label{display:block;font-weight:650;margin-bottom:8px}.handoff textarea{display:block;width:100%;min-height:150px;resize:vertical;border:1px solid #b8c8be;border-radius:4px;padding:12px;font:14px/1.65 system-ui,sans-serif;color:var(--ink);background:var(--paper);overflow-wrap:anywhere}.handoff .actions{margin:12px 0 0}.handoff button{font:inherit;cursor:pointer}.copy-status{min-height:28px;margin:6px 0 0;font-size:14px;color:var(--muted)}textarea:focus-visible{outline:3px solid #b46a22;outline-offset:3px}</style>
 </head>
 <body>
 <header><div class="wrap top"><a class="brand" href="./">Claude Private Browser Kit</a><div class="controls"><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit">GitHub</a><label class="sr" for="language">语言 / Language</label><select id="language" aria-label="语言 / Language"><option value="zh">简体中文</option><option value="en">English</option></select></div></div></header>
@@ -33,32 +33,36 @@
   <h1>Claude <span style="white-space:nowrap">专用浏览器工具包</span></h1>
   <p class="intro">给 Claude 一个专用浏览器，把日常浏览器留给自己。</p>
   <p class="subtle">分清桌面端外部链接与 MCP 浏览器入口，为指定应用配置独立浏览器资料和网络路径，不替换 Windows 默认浏览器。</p>
-  <nav class="actions" aria-label="项目入口"><a class="action primary" href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.zh-CN.md">阅读中文指南</a><a class="action" href="https://github.com/jiusi1-cpu/claude-private-browser-kit">查看源码</a></nav>
+  <div class="handoff"><label for="prompt-zh">把 GitHub 链接交给 AI，让 Agent 来配置。</label><textarea id="prompt-zh" readonly spellcheck="false">请帮我在这台 Windows 电脑上配置 Claude 专用浏览器：https://github.com/jiusi1-cpu/claude-private-browser-kit
+先读取仓库 AGENTS.md 和 docs/AGENT-START.zh-CN.md，检查本机环境，再按当前版本适配、备份、实施和验证。在我的授权范围内自主推进；不要修改系统默认浏览器、日常浏览器资料、全局网络或时区。不盲跑历史示例，不上传私人配置。需要登录、提权或扩大改动范围时由我接手。最后告诉我实际通过了什么、还有什么未验证，以及如何恢复。若你不能操作本机，请先说明，不要假装已执行。</textarea><nav class="actions" aria-label="交给 AI"><button class="action primary" type="button" data-copy="prompt-zh">复制给 AI 的完整指令</button><button class="action" type="button" data-copy="link" data-locale="zh">只复制仓库链接</button><a class="action" href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/AGENT-START.zh-CN.md">Agent 实施手册</a></nav><p class="copy-status" id="copy-status-zh" role="status" aria-live="polite"></p></div>
+  <p class="subtle">交给有本地文件与命令执行权限的 AI Agent。你决定授权范围并处理登录，环境检查、配置适配和验收交给 Agent。</p>
   <p class="notice">这是源码与验证文档，不是一键安装器。独立浏览器不等于完整安全沙箱，也不保证账号安全。</p>
   <section><h2>只改需要改的入口</h2><div class="grid"><div><h3>外部网页，进入专用 Edge</h3><p>进程内适配 Claude 打开的网页，日常软件保留原来的浏览器入口。</p></div><div><h3>浏览器资料分开</h3><p>独立程序与独立资料目录，不导入日常浏览器的 Cookie、密码或历史。</p></div><div><h3>先检查，再部署</h3><p>从只读检查开始，结合真实网络验收；明确改了什么，以及如何回滚。</p></div></div><figure class="figure"><img src="assets/social-preview-zh.png" width="1280" height="640" alt="架构示意：Claude 外部网页经专用 Edge 和指定网络规则；其他软件保留日常浏览器。"></figure></section>
-  <section><h2>先运行只读检查</h2><div class="steps"><div><p>需要 Git 和 Node.js 22 或更新版本，无须安装 npm 依赖。</p><p class="subtle">这些命令不会修改系统代理、注册表或防火墙规则。示例路径返回“尚未验证”，不代表你的环境已通过。</p><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/CHECKLIST.md">打开完整验收清单</a></div><div class="terminal"><pre>git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
+  <section><h2>Agent 从只读检查开始</h2><div class="steps"><div><p>需要 Git 和 Node.js 22 或更新版本，无须安装 npm 依赖。</p><p class="subtle">这些命令不会修改系统代理、注册表或防火墙规则。示例路径返回“尚未验证”，不代表你的环境已通过。</p><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/CHECKLIST.md">打开完整验收清单</a></div><div class="terminal"><pre>git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
 cd claude-private-browser-kit
 npm test
 npm run check:release
 node scripts/audit.cjs --config examples/audit.example.json</pre><p class="result">示例审计的预期结果：UNVERIFIED · 退出码 2</p></div></div></section>
   <section><h2>按问题找资料</h2><div class="links"><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.zh-CN.md">完整原理与实施顺序<small>方案取舍、独立路径、配置与回滚</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/LOCAL-CASE.md">已经测过什么<small>历史脱敏证据与尚未验证的部分</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/SHARE.zh-CN.md">把项目介绍给朋友<small>中文短介绍、长介绍与配图</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/issues">提交中文反馈<small>附版本与复现步骤，不要上传私人配置</small></a></div></section>
-  <section><h2>先说清边界</h2><details><summary>配好了 MCP，为什么登录页还开在别的浏览器？</summary><p>MCP 启动浏览器与桌面端打开外部网页是两条路径，需要分别适配和验收。现有证据没有证明登录后的真实 Claude 模型驱动 MCP 全链路通过。</p></details><details><summary>能保证固定 IP、家宽或者不封号吗？</summary><p>不能。出口性质与稳定性取决于你有权使用的上游服务，需要实际测量。本项目不提供账号或代理节点，不承诺隐藏所有地区信号。</p></details><details><summary>适合完全没有技术基础的用户吗？</summary><p>当前需要理解 Windows 配置并按环境适配。应用补丁有版本耦合和签名代价，浏览器副本要维护更新。全新机器完整部署尚未验证，不建议盲跑参考脚本。</p></details></section>
+  <section><h2>先说清边界</h2><details><summary>配好了 MCP，为什么登录页还开在别的浏览器？</summary><p>MCP 启动浏览器与桌面端打开外部网页是两条路径，需要分别适配和验收。现有证据没有证明登录后的真实 Claude 模型驱动 MCP 全链路通过。</p></details><details><summary>能保证固定 IP、家宽或者不封号吗？</summary><p>不能。出口性质与稳定性取决于你有权使用的上游服务，需要实际测量。本项目不提供账号或代理节点，不承诺隐藏所有地区信号。</p></details><details><summary>适合完全没有技术基础的用户吗？</summary><p>可以把配置工作交给有本机权限的 Agent，无需自己照着命令操作。你仍负责授权和登录。Agent 必须按版本适配并验收；全新机器完整部署尚未验证，不能承诺所有环境自动成功。</p></details></section>
 </div>
 <div data-language="en">
   <p class="meta">WINDOWS · MIT LICENSE · RESEARCH PREVIEW</p>
   <h1>Claude Private Browser Kit</h1>
   <p class="intro">Give Claude its own browser. Keep yours.</p>
   <p class="subtle">Separate desktop external links from MCP browser launches. Give selected applications their own browser data and network route without replacing the Windows default browser.</p>
-  <nav class="actions" aria-label="Project links"><a class="action primary" href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.en.md">Read the guide</a><a class="action" href="https://github.com/jiusi1-cpu/claude-private-browser-kit">Browse source</a></nav>
+  <div class="handoff"><label for="prompt-en">Give the GitHub link to AI. Let an agent handle setup.</label><textarea id="prompt-en" readonly spellcheck="false">Help me configure a dedicated Claude browser on this Windows computer: https://github.com/jiusi1-cpu/claude-private-browser-kit
+Read AGENTS.md and docs/AGENT-START.en.md first. Inspect this machine, then adapt to the installed versions, back up, implement and verify within my authorization. Preserve the Windows default browser, daily browser data, global network settings and timezone. Do not blindly run historical examples or upload private configuration. Hand login, elevation and scope changes back to me. Report what actually passed, what remains unverified and how to roll back. If you cannot operate this machine, say so before proceeding; never claim execution.</textarea><nav class="actions" aria-label="Hand off to AI"><button class="action primary" type="button" data-copy="prompt-en">Copy instructions for AI</button><button class="action" type="button" data-copy="link" data-locale="en">Copy repository link</button><a class="action" href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/AGENT-START.en.md">Agent runbook</a></nav><p class="copy-status" id="copy-status-en" role="status" aria-live="polite"></p></div>
+  <p class="subtle">Use an AI agent with local file and command access. You control authorization and login; the agent handles inspection, adaptation and verification.</p>
   <p class="notice">Source and verification documents, not a one-click installer. A dedicated browser is not a full sandbox or an account-safety guarantee.</p>
   <section><h2>Scope the change</h2><div class="grid"><div><h3>A dedicated external-link route</h3><p>A process-local adapter routes Claude's web links to a dedicated Edge, keeping the daily browser entry point unchanged.</p></div><div><h3>Separate browser data</h3><p>A separate executable and profile, without importing your daily cookies, passwords or browsing history.</p></div><div><h3>Audit before deployment</h3><p>Start with read-only checks, then test real network behavior. Keep changes inspectable and rollback explicit.</p></div></div><figure class="figure"><img src="assets/social-preview.png" width="1280" height="640" alt="Architecture: Claude uses dedicated Edge and app-path network controls; other apps keep the daily browser."></figure></section>
-  <section><h2>Start with read-only checks</h2><div class="steps"><div><p>Requires Git and Node.js 22 or newer. No npm dependency installation.</p><p class="subtle">These commands do not change the system proxy, registry or firewall. Example paths return UNVERIFIED, not a passing environment.</p><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/CHECKLIST.md">Open the verification checklist</a></div><div class="terminal"><pre>git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
+  <section><h2>The agent starts with read-only checks</h2><div class="steps"><div><p>Requires Git and Node.js 22 or newer. No npm dependency installation.</p><p class="subtle">These commands do not change the system proxy, registry or firewall. Example paths return UNVERIFIED, not a passing environment.</p><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/CHECKLIST.md">Open the verification checklist</a></div><div class="terminal"><pre>git clone https://github.com/jiusi1-cpu/claude-private-browser-kit.git
 cd claude-private-browser-kit
 npm test
 npm run check:release
 node scripts/audit.cjs --config examples/audit.example.json</pre><p class="result">Expected example audit: UNVERIFIED · exit code 2</p></div></div></section>
   <section><h2>Find the evidence</h2><div class="links"><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/GUIDE.en.md">Design and implementation<small>Tradeoffs, separate paths, configuration and rollback</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/docs/LOCAL-CASE.md">What was tested<small>Redacted historical evidence and remaining gaps</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/SECURITY.md">Security boundaries<small>Scope, risks and responsible reporting</small></a><a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/issues">Report an issue<small>Include versions and steps, never private configuration</small></a></div></section>
-  <section><h2>Know the limits</h2><details><summary>Why does the login page use a different browser from MCP?</summary><p>MCP browser startup and desktop external-link handling are separate paths. Each needs its own adaptation and verification. The retained evidence does not establish an authenticated model-driven MCP workflow.</p></details><details><summary>Does this guarantee a stable IP or prevent bans?</summary><p>No. Exit properties and stability depend on your authorized upstream service and require measurement. This project supplies neither accounts nor proxy nodes, and makes no claim to hide every regional signal.</p></details><details><summary>Is it ready for nontechnical users?</summary><p>Not as a turnkey installer. Application patches have version and signature tradeoffs; the separate browser needs security updates. Fresh-machine deployment remains unverified. Review and adapt reference scripts before use.</p></details></section>
+  <section><h2>Know the limits</h2><details><summary>Why does the login page use a different browser from MCP?</summary><p>MCP browser startup and desktop external-link handling are separate paths. Each needs its own adaptation and verification. The retained evidence does not establish an authenticated model-driven MCP workflow.</p></details><details><summary>Does this guarantee a stable IP or prevent bans?</summary><p>No. Exit properties and stability depend on your authorized upstream service and require measurement. This project supplies neither accounts nor proxy nodes, and makes no claim to hide every regional signal.</p></details><details><summary>Is it ready for nontechnical users?</summary><p>Delegate setup to an agent with local tools, rather than running commands yourself. You still control authorization and login. Version adaptation and verification are required; fresh-machine deployment remains unverified, so automatic success is not promised.</p></details></section>
 </div>
 <noscript><p>JavaScript 未启用：请使用 <a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/README.zh-CN.md">中文文档</a> / <a href="https://github.com/jiusi1-cpu/claude-private-browser-kit/blob/main/README.en.md">English documentation</a>。</p></noscript>
 </main>
@@ -74,6 +78,21 @@ node scripts/audit.cjs --config examples/audit.example.json</pre><p class="resul
   }
   applyLanguage(document.documentElement.dataset.lang);
   control.addEventListener('change',()=>{applyLanguage(control.value);try{localStorage.setItem('cpbk-language',control.value)}catch(e){}});
+  for(const button of document.querySelectorAll('[data-copy]')){
+    button.addEventListener('click',async()=>{
+      const locale=button.dataset.locale||button.dataset.copy.slice(-2);
+      const field=document.getElementById('prompt-'+locale);
+      const status=document.getElementById('copy-status-'+locale);
+      const text=button.dataset.copy==='link'?'https://github.com/jiusi1-cpu/claude-private-browser-kit':field.value;
+      try{
+        await navigator.clipboard.writeText(text);
+        status.textContent=locale==='zh'?'已复制，可粘贴给你的 AI Agent。':'Copied. Paste into your AI agent.';
+      }catch(e){
+        field.focus();field.select();
+        status.textContent=locale==='zh'?'浏览器未允许自动复制。已选中上方完整指令，请手动复制。':'Clipboard unavailable. Full instructions selected above; copy them manually.';
+      }
+    });
+  }
 </script>
 </body>
 </html>

@@ -1,281 +1,301 @@
 {
-    "schema":  1,
-    "package":  "claude-private-browser-kit",
-    "version":  "0.1.0-preview",
-    "createdAtUtc":  "2026-09-30T16:56:03.1873338+00:00",
-    "excludes":  [
-                     "Vendor binaries",
-                     "Application archives",
-                     "User profiles",
-                     "Private credentials",
-                     "Original runtime configuration",
-                     "Raw logs and screenshots"
-                 ],
-    "files":  [
-                  {
-                      "path":  ".github/workflows/checks.yml",
-                      "bytes":  846,
-                      "sha256":  "eaa754b9146fc7455a72fdf78503312099624637f0ea824bbd87784bb930f3d8"
-                  },
-                  {
-                      "path":  ".gitignore",
-                      "bytes":  218,
-                      "sha256":  "96caa02658fbf1704d7cec9f4a90e6ebbce23e24c9a88925e9fa694682f682ae"
-                  },
-                  {
-                      "path":  ".nojekyll",
-                      "bytes":  65,
-                      "sha256":  "86441c21aae9cd577f4fb6ee075dacb385d03000f2a1863ba0304afcec3c39bd"
-                  },
-                  {
-                      "path":  "assets/social-preview.png",
-                      "bytes":  67190,
-                      "sha256":  "6ea19f6b66ede75a86b44657199fd8214b634a083ce2cd1b2577fd7b14421a72"
-                  },
-                  {
-                      "path":  "assets/social-preview-zh.png",
-                      "bytes":  107603,
-                      "sha256":  "7639c3de06d523915d3bbd1ea94c01200626ad49ef16c7076a9be26ef9c0e591"
-                  },
-                  {
-                      "path":  "CONTRIBUTING.md",
-                      "bytes":  1561,
-                      "sha256":  "02d8d299c8a85b6008dd53dd0b84f5430418c8dae9e27addf845d5cffa341c0a"
-                  },
-                  {
-                      "path":  "docs/CHECKLIST.md",
-                      "bytes":  9017,
-                      "sha256":  "e5849cfa239111dc18086e8f6abb94e605de474207d43d811b59c8012b51a776"
-                  },
-                  {
-                      "path":  "docs/GUIDE.en.md",
-                      "bytes":  9278,
-                      "sha256":  "dc9b97ca696a3756a603142266642d5d6966138793353467e1babcc8fe195849"
-                  },
-                  {
-                      "path":  "docs/GUIDE.zh-CN.md",
-                      "bytes":  9583,
-                      "sha256":  "aa15784cc134a91491d16dcfb19dfa301fd33b65b6cf1df48ef266fa6aae2ee8"
-                  },
-                  {
-                      "path":  "docs/LAUNCH.md",
-                      "bytes":  5641,
-                      "sha256":  "f93da13de89c59cbc606c41398d055898b868adf003c34260255a720c594b7ec"
-                  },
-                  {
-                      "path":  "docs/LOCAL-CASE.md",
-                      "bytes":  3865,
-                      "sha256":  "5ccc7c3e15ed856a1366afc5c291cb147d9a792de36d57b252d33959bdb18d05"
-                  },
-                  {
-                      "path":  "docs/PACKAGE-MAP.md",
-                      "bytes":  6010,
-                      "sha256":  "6b489f3fb1a0221d6f6557a08ac022963cce79605c6a790a0f42cccf3ef8c74f"
-                  },
-                  {
-                      "path":  "docs/RELEASE.md",
-                      "bytes":  3572,
-                      "sha256":  "4dabfdb9a6c1702f1b46767aeba1a8b23d850bd13b7a29b628273e7458bb5132"
-                  },
-                  {
-                      "path":  "docs/RESEARCH-X.md",
-                      "bytes":  6376,
-                      "sha256":  "40c6f1a43b3b4d0d6730fe16d820ba9aa50d864d77091a6cb5b7721e1b02c725"
-                  },
-                  {
-                      "path":  "docs/SHARE.zh-CN.md",
-                      "bytes":  3318,
-                      "sha256":  "8f11247096c7c69c2f024af3e4382a482924514c6d0525dbd6ed54a15d9bc24f"
-                  },
-                  {
-                      "path":  "evidence/local-case.redacted.json",
-                      "bytes":  6314,
-                      "sha256":  "3fbe8829b9360d9e5a77135befa2c45e7c33631e868153f0fe267f2573c55787"
-                  },
-                  {
-                      "path":  "evidence/package-checks.json",
-                      "bytes":  894,
-                      "sha256":  "db1b534d6e72e7beda2c095b8eaf7412191754094c040deb7dd9a206d2969041"
-                  },
-                  {
-                      "path":  "evidence/static-audit.redacted.json",
-                      "bytes":  2671,
-                      "sha256":  "7b15bda7a59bc314d411ad68c0ebc1b8f007b81180d4d8c4132b4a3a1fdff853"
-                  },
-                  {
-                      "path":  "examples/audit.example.json",
-                      "bytes":  413,
-                      "sha256":  "a73d03e8e6d54226c386248ae3215c82385ca0e621dfd05da04f25a9d5b223cf"
-                  },
-                  {
-                      "path":  "examples/browser-config.example.json",
-                      "bytes":  928,
-                      "sha256":  "0f738191e2baaec5ebb84b370eee7d94f6438ffa262bda2e540bfdfc4ef0d90d"
-                  },
-                  {
-                      "path":  "examples/claude-config.fragment.json",
-                      "bytes":  320,
-                      "sha256":  "e0b5e8124c399502a260c1ca31f3edf44787e5c96f531b45000cb7db83c7f76a"
-                  },
-                  {
-                      "path":  "examples/proxy.example.yaml",
-                      "bytes":  483,
-                      "sha256":  "f966a7b827d89b406951102684ae3bd4b665f417004ba79a8a1566796cefd37c"
-                  },
-                  {
-                      "path":  "index.html",
-                      "bytes":  15047,
-                      "sha256":  "c37abcd554fac757f44465cbc3d993ab4cb1f65ef77ad8b7f38738133ea4ffda"
-                  },
-                  {
-                      "path":  "LICENSE",
-                      "bytes":  1096,
-                      "sha256":  "fc27be56c0641cc29686843659de7b56f48c545e33415acf9da44f78aada7a7d"
-                  },
-                  {
-                      "path":  "llms.txt",
-                      "bytes":  1582,
-                      "sha256":  "e0f033e06e09aece58a8cb9274d6752748299cf5a1568880534fe8c5ac6d66d6"
-                  },
-                  {
-                      "path":  "package.json",
-                      "bytes":  485,
-                      "sha256":  "d13575dc74d6d4ec4995b319c04ec2bb2bbd6943afc37227f74528b86fb091e9"
-                  },
-                  {
-                      "path":  "README.en.md",
-                      "bytes":  7177,
-                      "sha256":  "52c2698ed71bf2c8604994a67636376e90ce2efdbae45a95f6ba00091b205674"
-                  },
-                  {
-                      "path":  "README.md",
-                      "bytes":  8715,
-                      "sha256":  "b6021d764396d70801b67375aa8b3001789d1cc3797f9bc2e080d33363deadf8"
-                  },
-                  {
-                      "path":  "README.zh-CN.md",
-                      "bytes":  8715,
-                      "sha256":  "b6021d764396d70801b67375aa8b3001789d1cc3797f9bc2e080d33363deadf8"
-                  },
-                  {
-                      "path":  "reference/Block-ClaudeBrowserBridge.ps1.example",
-                      "bytes":  2245,
-                      "sha256":  "560aaf8c4aca3513b47554e4a3451afa3e361b39324de341e4496de946f5f443"
-                  },
-                  {
-                      "path":  "reference/Configure-PrivateEdge.ps1.example",
-                      "bytes":  3014,
-                      "sha256":  "eef5190d76cce508e2c01aa6278221b93b4c3fca03ccc22c355f5606addfad46"
-                  },
-                  {
-                      "path":  "reference/Install-PrivateLinks.cjs.example",
-                      "bytes":  5398,
-                      "sha256":  "fad3bde069894d2035ce687cd54a34899e06f223462bd54b15c32764d96f9728"
-                  },
-                  {
-                      "path":  "reference/Launch-ClaudeGuard.ps1.example",
-                      "bytes":  7034,
-                      "sha256":  "2a4b54c5c90d5980fc71c0d46bab8507e11a4041f2398c36361a6ce56664efd3"
-                  },
-                  {
-                      "path":  "reference/Rollback-ClaudePrivateLinks.ps1.example",
-                      "bytes":  1547,
-                      "sha256":  "abfa88aca5174d8ed239a5851b6abf20a56a8e62301f9cd1a37d5c9a8200d60b"
-                  },
-                  {
-                      "path":  "reference/Snapshot-PrivateLinks.ps1.example",
-                      "bytes":  1224,
-                      "sha256":  "b86d83003866eeda3a0f7a2e612ac153dd62cc568a04b4afbc6c75a9bb679c61"
-                  },
-                  {
-                      "path":  "reference/Start-Proxy.ps1.example",
-                      "bytes":  1345,
-                      "sha256":  "fc65c2d126d310318e800018ac31698db3abd6f8b14e960b6e71101898117e02"
-                  },
-                  {
-                      "path":  "reference/Test-FixedExit.ps1.example",
-                      "bytes":  830,
-                      "sha256":  "721f2c1087b211a184f3c0c6c8d04f130fd6ed4f7ebbd4cc0cb9789107425fb9"
-                  },
-                  {
-                      "path":  "reference/Test-PrivateEdge.cjs.example",
-                      "bytes":  4068,
-                      "sha256":  "c8b761d0fc2ebad7953e4eaaf509122552a127fda8b54b25d543403e1c70d7fc"
-                  },
-                  {
-                      "path":  "reference/Test-PrivateEdgeMcp.cjs.example",
-                      "bytes":  3634,
-                      "sha256":  "ae83576c4f5e7810f0e4fd97585fcabc77c075e20e94f83c907ce529b230342d"
-                  },
-                  {
-                      "path":  "reference/Verify-Dns.ps1.example",
-                      "bytes":  2865,
-                      "sha256":  "f415d484ce385d53e27a9626cfcf968d73c2be962b1682abaa6c7fc18350cbfb"
-                  },
-                  {
-                      "path":  "reference/Verify-Network.ps1.example",
-                      "bytes":  4295,
-                      "sha256":  "d31ac3b907e500938e51e3380d093cea93c75b106076d26904319c3afa82476c"
-                  },
-                  {
-                      "path":  "reference/Verify-PrivateLinks.cjs.example",
-                      "bytes":  3782,
-                      "sha256":  "0c2a0d5e93775e53049230a0fa295f8241c32ff0ffb6e1dc9b39126504ee796d"
-                  },
-                  {
-                      "path":  "scripts/audit.cjs",
-                      "bytes":  4896,
-                      "sha256":  "ffeba9aeea2264b9eea5d062545dbe1a13c74f076f068d40dc25ad2088947345"
-                  },
-                  {
-                      "path":  "scripts/release-check.cjs",
-                      "bytes":  3961,
-                      "sha256":  "94bd2e62e8434bcae0d9c521e880498396bf88549aa9a65b49d503756e155d62"
-                  },
-                  {
-                      "path":  "SECURITY.md",
-                      "bytes":  3313,
-                      "sha256":  "b8c08dd3cad278872b6d45c31552dc13e18a461cf6ed768609f83bef8fb67d23"
-                  },
-                  {
-                      "path":  "src/ClaudeGuardWfp.cs",
-                      "bytes":  8738,
-                      "sha256":  "cdac93c2844675ae2228fb9edc2d94ec4195f6f6ba8dae63614d48f79fc02590"
-                  },
-                  {
-                      "path":  "src/guarded-mcp.cjs",
-                      "bytes":  2165,
-                      "sha256":  "473f92cd856371ed2d3e82ce27f9adff31438901f635e5fb02c1a1e4880f09c9"
-                  },
-                  {
-                      "path":  "src/NetworkProbe.cs",
-                      "bytes":  1415,
-                      "sha256":  "d3fd3cdf7c22e73ebd3e68c0e9510f48c48d2e54b0c4bfa757b28f1f89fe8109"
-                  },
-                  {
-                      "path":  "src/private-links.cjs",
-                      "bytes":  3743,
-                      "sha256":  "22c3984bb200b9553b559b64197c505641c710215e114ea87780bff5e36012fa"
-                  },
-                  {
-                      "path":  "tests/audit.cjs",
-                      "bytes":  1332,
-                      "sha256":  "239512b64b87df59ce1c530f328b7a06b80b51c1100ad61a1cfd7371d9b6ab93"
-                  },
-                  {
-                      "path":  "tests/language.cjs",
-                      "bytes":  2027,
-                      "sha256":  "c5e852dbcdd47954cce6b740158505df23b12fe3c521d7532393071e8b4f7ce7"
-                  },
-                  {
-                      "path":  "tests/private-links.cjs",
-                      "bytes":  2479,
-                      "sha256":  "5da379763afbbf8df439c0d90b1f6c7a47f263d08fac4e3cb0e91e085106ae8f"
-                  },
-                  {
-                      "path":  "THIRD_PARTY_NOTICES.md",
-                      "bytes":  2038,
-                      "sha256":  "ed392818253a51e8c56014e55e8de2639eaa0f5e8cef1bb89519335d06cf3c46"
-                  }
-              ]
+  "schema": 1,
+  "package": "claude-private-browser-kit",
+  "version": "0.1.0-preview",
+  "createdAtUtc": "2026-09-30T17:28:16.8866997+00:00",
+  "excludes": [
+    "Vendor binaries",
+    "Application archives",
+    "User profiles",
+    "Private credentials",
+    "Original runtime configuration",
+    "Raw logs and screenshots"
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/checks.yml",
+      "bytes": 846,
+      "sha256": "eaa754b9146fc7455a72fdf78503312099624637f0ea824bbd87784bb930f3d8"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 218,
+      "sha256": "96caa02658fbf1704d7cec9f4a90e6ebbce23e24c9a88925e9fa694682f682ae"
+    },
+    {
+      "path": ".nojekyll",
+      "bytes": 65,
+      "sha256": "86441c21aae9cd577f4fb6ee075dacb385d03000f2a1863ba0304afcec3c39bd"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 4432,
+      "sha256": "d02109d735eb42a3f2689387190c738b1b42e1a3e4c8a712b31c7f10ab869370"
+    },
+    {
+      "path": "assets/social-preview-zh.png",
+      "bytes": 107603,
+      "sha256": "7639c3de06d523915d3bbd1ea94c01200626ad49ef16c7076a9be26ef9c0e591"
+    },
+    {
+      "path": "assets/social-preview.png",
+      "bytes": 67190,
+      "sha256": "6ea19f6b66ede75a86b44657199fd8214b634a083ce2cd1b2577fd7b14421a72"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 1561,
+      "sha256": "02d8d299c8a85b6008dd53dd0b84f5430418c8dae9e27addf845d5cffa341c0a"
+    },
+    {
+      "path": "docs/AGENT-START.en.md",
+      "bytes": 10300,
+      "sha256": "f1167c8b16ca5c7be73b2247ee2d0ce780dab61ddf37445161e5a10c0b463a4a"
+    },
+    {
+      "path": "docs/AGENT-START.zh-CN.md",
+      "bytes": 9323,
+      "sha256": "987c670f8fb4244d57cc2f7102ba45d765c84bb083ee5646b86cd394686ff92e"
+    },
+    {
+      "path": "docs/CHECKLIST.md",
+      "bytes": 9017,
+      "sha256": "e5849cfa239111dc18086e8f6abb94e605de474207d43d811b59c8012b51a776"
+    },
+    {
+      "path": "docs/GUIDE.en.md",
+      "bytes": 9278,
+      "sha256": "dc9b97ca696a3756a603142266642d5d6966138793353467e1babcc8fe195849"
+    },
+    {
+      "path": "docs/GUIDE.zh-CN.md",
+      "bytes": 9583,
+      "sha256": "aa15784cc134a91491d16dcfb19dfa301fd33b65b6cf1df48ef266fa6aae2ee8"
+    },
+    {
+      "path": "docs/LAUNCH.md",
+      "bytes": 5641,
+      "sha256": "f93da13de89c59cbc606c41398d055898b868adf003c34260255a720c594b7ec"
+    },
+    {
+      "path": "docs/LOCAL-CASE.md",
+      "bytes": 3865,
+      "sha256": "5ccc7c3e15ed856a1366afc5c291cb147d9a792de36d57b252d33959bdb18d05"
+    },
+    {
+      "path": "docs/PACKAGE-MAP.md",
+      "bytes": 6010,
+      "sha256": "6b489f3fb1a0221d6f6557a08ac022963cce79605c6a790a0f42cccf3ef8c74f"
+    },
+    {
+      "path": "docs/RELEASE.md",
+      "bytes": 3572,
+      "sha256": "4dabfdb9a6c1702f1b46767aeba1a8b23d850bd13b7a29b628273e7458bb5132"
+    },
+    {
+      "path": "docs/RESEARCH-X.md",
+      "bytes": 6376,
+      "sha256": "40c6f1a43b3b4d0d6730fe16d820ba9aa50d864d77091a6cb5b7721e1b02c725"
+    },
+    {
+      "path": "docs/SHARE.zh-CN.md",
+      "bytes": 3674,
+      "sha256": "de2a97fa875bc01eefed88677eb82c07aa1097cd9f59f785f3a47b927b482b96"
+    },
+    {
+      "path": "evidence/local-case.redacted.json",
+      "bytes": 6314,
+      "sha256": "3fbe8829b9360d9e5a77135befa2c45e7c33631e868153f0fe267f2573c55787"
+    },
+    {
+      "path": "evidence/package-checks.json",
+      "bytes": 894,
+      "sha256": "db1b534d6e72e7beda2c095b8eaf7412191754094c040deb7dd9a206d2969041"
+    },
+    {
+      "path": "evidence/static-audit.redacted.json",
+      "bytes": 2671,
+      "sha256": "7b15bda7a59bc314d411ad68c0ebc1b8f007b81180d4d8c4132b4a3a1fdff853"
+    },
+    {
+      "path": "examples/audit.example.json",
+      "bytes": 413,
+      "sha256": "a73d03e8e6d54226c386248ae3215c82385ca0e621dfd05da04f25a9d5b223cf"
+    },
+    {
+      "path": "examples/browser-config.example.json",
+      "bytes": 928,
+      "sha256": "0f738191e2baaec5ebb84b370eee7d94f6438ffa262bda2e540bfdfc4ef0d90d"
+    },
+    {
+      "path": "examples/claude-config.fragment.json",
+      "bytes": 320,
+      "sha256": "e0b5e8124c399502a260c1ca31f3edf44787e5c96f531b45000cb7db83c7f76a"
+    },
+    {
+      "path": "examples/proxy.example.yaml",
+      "bytes": 483,
+      "sha256": "f966a7b827d89b406951102684ae3bd4b665f417004ba79a8a1566796cefd37c"
+    },
+    {
+      "path": "index.html",
+      "bytes": 19022,
+      "sha256": "1e61f15049048fa730476415d4b1397f20d5f0c9e56c67466545a62c25a333f9"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1096,
+      "sha256": "fc27be56c0641cc29686843659de7b56f48c545e33415acf9da44f78aada7a7d"
+    },
+    {
+      "path": "llms.txt",
+      "bytes": 2226,
+      "sha256": "10653aebaa295447fddf94db52bb5bb9eb6be135e8872745218c6af16cc6da46"
+    },
+    {
+      "path": "package.json",
+      "bytes": 511,
+      "sha256": "a95e1112e1ff5bf48337f0dd7d1a1fe88d5f5fe49b56efdb8463ba9aa99afed7"
+    },
+    {
+      "path": "README.en.md",
+      "bytes": 8452,
+      "sha256": "a4ea3527d5bfaaa29370e1fb0075cbeeafdd50b52e2c39d9ae3ea3a6e673dd54"
+    },
+    {
+      "path": "README.md",
+      "bytes": 10046,
+      "sha256": "b1b0649342bb379a8f446d2929aa3d30e9f1a4277117c637635c174c464690af"
+    },
+    {
+      "path": "README.zh-CN.md",
+      "bytes": 10046,
+      "sha256": "b1b0649342bb379a8f446d2929aa3d30e9f1a4277117c637635c174c464690af"
+    },
+    {
+      "path": "reference/Block-ClaudeBrowserBridge.ps1.example",
+      "bytes": 2245,
+      "sha256": "560aaf8c4aca3513b47554e4a3451afa3e361b39324de341e4496de946f5f443"
+    },
+    {
+      "path": "reference/Configure-PrivateEdge.ps1.example",
+      "bytes": 3014,
+      "sha256": "eef5190d76cce508e2c01aa6278221b93b4c3fca03ccc22c355f5606addfad46"
+    },
+    {
+      "path": "reference/Install-PrivateLinks.cjs.example",
+      "bytes": 5398,
+      "sha256": "fad3bde069894d2035ce687cd54a34899e06f223462bd54b15c32764d96f9728"
+    },
+    {
+      "path": "reference/Launch-ClaudeGuard.ps1.example",
+      "bytes": 7034,
+      "sha256": "2a4b54c5c90d5980fc71c0d46bab8507e11a4041f2398c36361a6ce56664efd3"
+    },
+    {
+      "path": "reference/Rollback-ClaudePrivateLinks.ps1.example",
+      "bytes": 1547,
+      "sha256": "abfa88aca5174d8ed239a5851b6abf20a56a8e62301f9cd1a37d5c9a8200d60b"
+    },
+    {
+      "path": "reference/Snapshot-PrivateLinks.ps1.example",
+      "bytes": 1224,
+      "sha256": "b86d83003866eeda3a0f7a2e612ac153dd62cc568a04b4afbc6c75a9bb679c61"
+    },
+    {
+      "path": "reference/Start-Proxy.ps1.example",
+      "bytes": 1345,
+      "sha256": "fc65c2d126d310318e800018ac31698db3abd6f8b14e960b6e71101898117e02"
+    },
+    {
+      "path": "reference/Test-FixedExit.ps1.example",
+      "bytes": 830,
+      "sha256": "721f2c1087b211a184f3c0c6c8d04f130fd6ed4f7ebbd4cc0cb9789107425fb9"
+    },
+    {
+      "path": "reference/Test-PrivateEdge.cjs.example",
+      "bytes": 4068,
+      "sha256": "c8b761d0fc2ebad7953e4eaaf509122552a127fda8b54b25d543403e1c70d7fc"
+    },
+    {
+      "path": "reference/Test-PrivateEdgeMcp.cjs.example",
+      "bytes": 3634,
+      "sha256": "ae83576c4f5e7810f0e4fd97585fcabc77c075e20e94f83c907ce529b230342d"
+    },
+    {
+      "path": "reference/Verify-Dns.ps1.example",
+      "bytes": 2865,
+      "sha256": "f415d484ce385d53e27a9626cfcf968d73c2be962b1682abaa6c7fc18350cbfb"
+    },
+    {
+      "path": "reference/Verify-Network.ps1.example",
+      "bytes": 4295,
+      "sha256": "d31ac3b907e500938e51e3380d093cea93c75b106076d26904319c3afa82476c"
+    },
+    {
+      "path": "reference/Verify-PrivateLinks.cjs.example",
+      "bytes": 3782,
+      "sha256": "0c2a0d5e93775e53049230a0fa295f8241c32ff0ffb6e1dc9b39126504ee796d"
+    },
+    {
+      "path": "scripts/audit.cjs",
+      "bytes": 4896,
+      "sha256": "ffeba9aeea2264b9eea5d062545dbe1a13c74f076f068d40dc25ad2088947345"
+    },
+    {
+      "path": "scripts/release-check.cjs",
+      "bytes": 3961,
+      "sha256": "94bd2e62e8434bcae0d9c521e880498396bf88549aa9a65b49d503756e155d62"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 3313,
+      "sha256": "b8c08dd3cad278872b6d45c31552dc13e18a461cf6ed768609f83bef8fb67d23"
+    },
+    {
+      "path": "src/ClaudeGuardWfp.cs",
+      "bytes": 8738,
+      "sha256": "cdac93c2844675ae2228fb9edc2d94ec4195f6f6ba8dae63614d48f79fc02590"
+    },
+    {
+      "path": "src/guarded-mcp.cjs",
+      "bytes": 2165,
+      "sha256": "473f92cd856371ed2d3e82ce27f9adff31438901f635e5fb02c1a1e4880f09c9"
+    },
+    {
+      "path": "src/NetworkProbe.cs",
+      "bytes": 1415,
+      "sha256": "d3fd3cdf7c22e73ebd3e68c0e9510f48c48d2e54b0c4bfa757b28f1f89fe8109"
+    },
+    {
+      "path": "src/private-links.cjs",
+      "bytes": 3743,
+      "sha256": "22c3984bb200b9553b559b64197c505641c710215e114ea87780bff5e36012fa"
+    },
+    {
+      "path": "tests/audit.cjs",
+      "bytes": 1332,
+      "sha256": "239512b64b87df59ce1c530f328b7a06b80b51c1100ad61a1cfd7371d9b6ab93"
+    },
+    {
+      "path": "tests/handoff.cjs",
+      "bytes": 2424,
+      "sha256": "e3b461c1f5949877caecf1885759860c0984769b4aeccb2679d6fc704b2e8c6f"
+    },
+    {
+      "path": "tests/language.cjs",
+      "bytes": 2051,
+      "sha256": "abac05df21ba4a50535bb5cbc6619805b5642a782d6cd838e60f44a64331ad37"
+    },
+    {
+      "path": "tests/private-links.cjs",
+      "bytes": 2479,
+      "sha256": "5da379763afbbf8df439c0d90b1f6c7a47f263d08fac4e3cb0e91e085106ae8f"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 2038,
+      "sha256": "ed392818253a51e8c56014e55e8de2639eaa0f5e8cef1bb89519335d06cf3c46"
+    }
+  ]
 }

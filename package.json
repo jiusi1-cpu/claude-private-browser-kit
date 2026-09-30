@@ -6,7 +6,7 @@
   "license": "MIT",
   "engines": { "node": ">=22" },
   "scripts": {
-    "test": "node tests/private-links.cjs && node tests/audit.cjs && node tests/language.cjs",
+    "test": "node tests/private-links.cjs && node tests/audit.cjs && node tests/language.cjs && node tests/handoff.cjs",
     "audit:local": "node scripts/audit.cjs",
     "check:release": "node scripts/release-check.cjs"
   }

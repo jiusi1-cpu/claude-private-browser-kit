@@ -10,6 +10,27 @@ Separate Claude Desktop's external links, browser profile, and proxy route on Wi
 
 **Windows | MIT | Research preview | English / 简体中文**
 
+## Give This Repository to Your AI Agent
+
+Use an agent with local file and terminal access. Paste this request; you do not need to run the setup commands yourself:
+
+```text
+Configure a dedicated Claude browser on this Windows computer:
+https://github.com/jiusi1-cpu/claude-private-browser-kit
+
+Read AGENTS.md and docs/AGENT-START.en.md first, then inspect this machine.
+Within my authorization, adapt to installed versions, back up, implement and verify.
+Preserve my default browser, daily browser data, global network settings and timezone.
+Do not blindly run historical examples or upload private configuration.
+Hand login, elevation and scope changes back to me.
+Report passed, failed and unverified checks, with rollback instructions.
+If you cannot operate this machine, say so; never claim execution.
+```
+
+[Copy from the website](https://jiusi1-cpu.github.io/claude-private-browser-kit/) | [Agent runbook](docs/AGENT-START.en.md) | [中文实施手册](docs/AGENT-START.zh-CN.md)
+
+You control authorization and login; the agent handles inspection, adaptation and verification. A chat-only AI cannot configure your machine. Agent-led setup is not a universal installer or proof of compatibility.
+
 ## Why This Exists
 
 Claude opens a link. Your everyday browser appears, with your everyday profile. Changing the Windows default browser would affect every other app too.
@@ -53,7 +74,7 @@ Other Windows applications -> original Windows URL associations -> daily browser
 
 There is no global URL router in the deployed case. Browser Tamer was considered and rejected because a global default-handler architecture would also receive links from unrelated applications.
 
-## Safe Local Checks
+## Read-only Checks for the Agent
 
 Requires Node.js 22 or newer. These commands use only built-in Node modules; no `npm install` is required.
 
@@ -107,4 +128,4 @@ The original local case used Claude Desktop `2.9939.2`, Edge `154.0.4258.37`, an
 
 **Does it guarantee a fixed IP or prevent account bans?** No. Exit stability depends on your authorized upstream service and must be measured. No account-safety or region-eligibility guarantee is made.
 
-**Can an AI agent understand this repository?** Start with [llms.txt](llms.txt), then the guide and checklist. This is a navigation aid, not a claim of crawler indexing or AI recommendation.
+**Where should an AI agent start?** Read [AGENTS.md](AGENTS.md) and the [runbook](docs/AGENT-START.en.md). [llms.txt](llms.txt) indexes supporting material. These are execution and navigation aids, not a claim of crawler indexing or AI recommendation.
