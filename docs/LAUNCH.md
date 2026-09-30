@@ -4,25 +4,27 @@ Updated 2026-10-01. The repository is public. This document describes positionin
 
 ## Positioning / 定位
 
-**Give Claude its own browser. Keep yours.**
+**Concerned about Claude account restrictions? Start with your local environment.**
 
-**给 Claude 一个专用浏览器，把日常浏览器留给自己。**
+**担心 Claude 账号风控？先把本机网络与浏览器环境理清。**
 
-Target Windows users of Claude Desktop who need app-specific external-link routing, separate browser data, and an inspectable network policy. This is a research preview for technical users, not an anti-ban service or a consumer-ready installer.
+Target users in China and other cross-region setups who are concerned about account restrictions. The deliverable is agent-led Windows environment auditing and separation. Selected local controls were tested; their effect on enforcement is unknown. This is not proven anti-ban technology or a regional-eligibility bypass.
 
-面向需要分离 Claude Desktop 与日常浏览器的 Windows 技术用户。卖点是明确的作用范围、可读源码、检查与回滚，不是“神奇防封”。
+面向中国及跨区域场景中关注账号限制的用户。宣传围绕“担心风控，先查环境”；使用方式是把链接交给本地 Agent。Windows 实测有效仅指案例内具体功能，不代表降低封号率或避开检测。
 
 ## Repository Metadata / 仓库元信息
 
 Name: `claude-private-browser-kit`
 
-Description: 给 Claude 一个专用浏览器，把日常浏览器留给自己。Windows 开源研究工具包：独立 Edge、应用内链接适配、按程序路径约束网络、只读检查与回滚参考。中文指南 / English。
+Description: 面向中国及跨区域使用场景的 Claude 环境自检与隔离工具包。交给 AI Agent 部署；Windows 本机案例验证浏览器分离与部分网络限制，不承诺防封或绕过检测。中文 / English。
 
 Suggested topics: `claude-desktop`, `windows`, `browser-isolation`, `microsoft-edge`, `mcp`, `playwright`, `privacy`, `proxy`, `windows-filtering-platform`, `network-security`, `dns`, `webrtc`, `electron`, `powershell`.
 
 Use accurate topics only. The browser-isolation label describes separation of browser state and routing, not a full security sandbox.
 
 ## Short Announcement / 简短发布文案
+
+Current approved copy: [中文宣传稿](SHARE.zh-CN.md) / [English sharing copy](SHARE.en.md). The functional introduction below remains background material. Any "Windows tested" statement must link to [the bounded local case](LOCAL-CASE.md); never imply measured ban prevention.
 
 ### English
 
