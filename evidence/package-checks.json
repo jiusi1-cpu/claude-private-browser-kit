@@ -1,0 +1,35 @@
+{
+  "checkedAt": "2026-09-30T15:30:54.154Z",
+  "results": [
+    {
+      "name": "tests/private-links.cjs",
+      "status": "PASS"
+    },
+    {
+      "name": "tests/audit.cjs",
+      "status": "PASS"
+    },
+    {
+      "name": "scripts/release-check.cjs",
+      "status": "PASS"
+    },
+    {
+      "name": "Example configuration returns UNVERIFIED with exit 2",
+      "status": "PASS"
+    },
+    {
+      "name": "Current local read-only audit: no static failure; dynamic checks remain UNVERIFIED",
+      "status": "PASS"
+    },
+    {
+      "name": "Additional private-value scan over allowlisted export",
+      "status": "PASS",
+      "files": 48
+    }
+  ],
+  "notes": [
+    "PowerShell references parsed and C# sources compiled separately without installing filters.",
+    "GitHub Actions has not run remotely.",
+    "No fresh-machine deployment or authenticated account flow was tested."
+  ]
+}

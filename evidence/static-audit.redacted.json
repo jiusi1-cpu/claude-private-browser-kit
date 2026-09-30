@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "mode": "read-only-local-static-audit",
+  "status": "UNVERIFIED",
+  "checks": [
+    {
+      "name": "claudeExe",
+      "status": "PASS"
+    },
+    {
+      "name": "appAsar",
+      "status": "PASS"
+    },
+    {
+      "name": "privateEdgeExe",
+      "status": "PASS"
+    },
+    {
+      "name": "privateProfile",
+      "status": "PASS"
+    },
+    {
+      "name": "dailyEdgeExe",
+      "status": "PASS"
+    },
+    {
+      "name": "dailyProfile",
+      "status": "PASS"
+    },
+    {
+      "name": "guardManifest",
+      "status": "PASS"
+    },
+    {
+      "name": "Distinct browser executable",
+      "status": "PASS"
+    },
+    {
+      "name": "Distinct browser profile",
+      "status": "PASS"
+    },
+    {
+      "name": "Packed file digests",
+      "status": "PASS",
+      "detail": "Checked entries: 369"
+    },
+    {
+      "name": "Private links entry hook",
+      "status": "PASS"
+    },
+    {
+      "name": "Embedded ASAR header digest",
+      "status": "PASS"
+    },
+    {
+      "name": "Authenticode signature",
+      "status": "UNVERIFIED",
+      "detail": "Use Get-AuthenticodeSignature; matching ASAR hashes do not restore a vendor signature"
+    },
+    {
+      "name": "Guard manifest file hashes",
+      "status": "PASS"
+    },
+    {
+      "name": "WFP condition values and delivery behavior",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "Windows default associations before/after",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "Browser egress IP and repeated stability",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "DNS positive-control trace",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "WebRTC ICE behavior",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "Proxy outage and recovery",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "User-completed login callback",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    },
+    {
+      "name": "Authenticated Claude MCP task",
+      "status": "UNVERIFIED",
+      "detail": "Requires the corresponding manual or controlled integration check"
+    }
+  ]
+}

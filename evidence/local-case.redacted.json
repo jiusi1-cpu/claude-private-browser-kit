@@ -1,0 +1,209 @@
+{
+  "date": "2026-09-30",
+  "evidenceType": "Redacted historical local case, not a fresh public-kit integration run",
+  "results": [
+    {
+      "source": "network-verification.json",
+      "tests": [
+        {
+          "pass": true,
+          "name": "Allow exact local TCP proxy"
+        },
+        {
+          "pass": true,
+          "name": "Deny alternate local TCP proxy"
+        },
+        {
+          "pass": true,
+          "name": "Deny direct public TCP"
+        },
+        {
+          "pass": true,
+          "name": "UDP delivery blocked, positive receiver baseline"
+        },
+        {
+          "pass": true,
+          "name": "Deny IPv6 loopback"
+        },
+        {
+          "pass": true,
+          "name": "Fixed exit before outage"
+        },
+        {
+          "pass": true,
+          "name": "Proxy unavailable fails closed"
+        },
+        {
+          "pass": true,
+          "name": "Direct route remains blocked during outage"
+        },
+        {
+          "pass": true,
+          "name": "Fixed exit restored after outage"
+        }
+      ],
+      "checks": null,
+      "limits": null,
+      "dnsObservationPass": null,
+      "dnsBaselineEvents": null,
+      "proxiedHostnameDnsEvents": null,
+      "rollbackRestoredExe": null,
+      "rollbackRestoredArchive": null,
+      "rollbackRestoredManifest": null
+    },
+    {
+      "source": "private-edge-verification.json",
+      "tests": [
+        {
+          "pass": true,
+          "name": "Dedicated Edge fixed exit"
+        },
+        {
+          "pass": true,
+          "name": "No ICE candidates with public STUN server"
+        },
+        {
+          "pass": true,
+          "name": "Direct literal-IP HTTPS blocked"
+        },
+        {
+          "pass": true,
+          "name": "Missing proxy does not fall back"
+        },
+        {
+          "pass": true,
+          "name": "Direct IPv6 blocked"
+        }
+      ],
+      "checks": null,
+      "limits": null,
+      "dnsObservationPass": null,
+      "dnsBaselineEvents": null,
+      "proxiedHostnameDnsEvents": null,
+      "rollbackRestoredExe": null,
+      "rollbackRestoredArchive": null,
+      "rollbackRestoredManifest": null
+    },
+    {
+      "source": "private-edge-dns-verification.json",
+      "tests": [],
+      "checks": null,
+      "limits": null,
+      "dnsObservationPass": true,
+      "dnsBaselineEvents": 20,
+      "proxiedHostnameDnsEvents": 0,
+      "rollbackRestoredExe": null,
+      "rollbackRestoredArchive": null,
+      "rollbackRestoredManifest": null
+    },
+    {
+      "source": "private-edge-mcp-verification.json",
+      "tests": [
+        {
+          "pass": true,
+          "name": "MCP initialize"
+        },
+        {
+          "pass": true,
+          "name": "Unsafe code and alternate browser installation absent"
+        },
+        {
+          "pass": true,
+          "name": "Unadvertised unsafe call rejected"
+        },
+        {
+          "pass": true,
+          "name": "MCP launches and navigates dedicated Edge"
+        },
+        {
+          "pass": true,
+          "name": "MCP browser reports fixed exit"
+        }
+      ],
+      "checks": null,
+      "limits": null,
+      "dnsObservationPass": null,
+      "dnsBaselineEvents": null,
+      "proxiedHostnameDnsEvents": null,
+      "rollbackRestoredExe": null,
+      "rollbackRestoredArchive": null,
+      "rollbackRestoredManifest": null
+    },
+    {
+      "source": "private-links-unit-verification.json",
+      "tests": [
+        {
+          "pass": true,
+          "name": "HTTPS preserves exact URL and uses private executable/profile/proxy without shell"
+        },
+        {
+          "pass": true,
+          "name": "HTTP and explicit Edge web protocol routed privately"
+        },
+        {
+          "pass": true,
+          "name": "Custom callback protocol delegated unchanged"
+        },
+        {
+          "pass": true,
+          "name": "Missing browser fails closed"
+        },
+        {
+          "pass": true,
+          "name": "Spawn failure fails closed and redacts underlying errors"
+        },
+        {
+          "pass": true,
+          "name": "Invalid and credential-bearing URLs rejected"
+        }
+      ],
+      "checks": null,
+      "limits": null,
+      "dnsObservationPass": null,
+      "dnsBaselineEvents": null,
+      "proxiedHostnameDnsEvents": null,
+      "rollbackRestoredExe": null,
+      "rollbackRestoredArchive": null,
+      "rollbackRestoredManifest": null
+    },
+    {
+      "source": "private-links-verification.json",
+      "tests": [],
+      "checks": [
+        "http UserChoice unchanged, including Windows hash",
+        "https UserChoice unchanged, including Windows hash",
+        "Claude callback executable and arguments unchanged (case-insensitive Windows path)",
+        "Existing daily Edge main process unchanged",
+        "Real Claude shell.openExternal diagnostic launched dedicated Edge directly",
+        "All 369 packed-entry integrity hashes and embedded ASAR header digest verified",
+        "Electron security fuses unchanged",
+        "Actual rollback restored all three original hashes before reinstallation",
+        "Adapter loaded again through original desktop shortcut without diagnostic flag"
+      ],
+      "limits": [
+        "User login/OAuth completion not exercised",
+        "New browser page body could not be read by window tool; fixed exit not retested in this turn",
+        "Does not restrict arbitrary Claude Code child processes",
+        "Local patch requires revalidation after app updates"
+      ],
+      "dnsObservationPass": null,
+      "dnsBaselineEvents": null,
+      "proxiedHostnameDnsEvents": null,
+      "rollbackRestoredExe": null,
+      "rollbackRestoredArchive": null,
+      "rollbackRestoredManifest": null
+    },
+    {
+      "source": "private-links-rollback-verification.json",
+      "tests": [],
+      "checks": null,
+      "limits": null,
+      "dnsObservationPass": null,
+      "dnsBaselineEvents": null,
+      "proxiedHostnameDnsEvents": null,
+      "rollbackRestoredExe": true,
+      "rollbackRestoredArchive": true,
+      "rollbackRestoredManifest": true
+    }
+  ]
+}
