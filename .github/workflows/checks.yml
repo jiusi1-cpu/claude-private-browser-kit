@@ -1,0 +1,25 @@
+name: Source checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - run: npm run check:release
+      - name: Parse PowerShell reference sources without executing them
+        shell: pwsh
+        run: |
+          $failed = $false
+          Get-ChildItem reference -Filter '*.ps1.example' | ForEach-Object {
+            $tokens = $null
+            $errors = $null
+            [System.Management.Automation.Language.Parser]::ParseInput((Get-Content $_.FullName -Raw), [ref]$tokens, [ref]$errors) | Out-Null
+            if ($errors.Count) { $failed = $true; Write-Error "Parse failed: $($_.Name)" }
+          }
+          if ($failed) { exit 1 }
