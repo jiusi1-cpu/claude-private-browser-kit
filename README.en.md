@@ -1,4 +1,13 @@
-# Claude Private Browser Kit
+# Claude Account Risk Toolkit
+
+## October 1 Update
+
+The Chinese project name is **Claude 防封方案**. This name describes the concern being investigated, not proven protection against account restrictions. The repository URL stays unchanged.
+
+- [Read-only WFP audit and logged-in safety](docs/OFFLINE-AUDIT.md): verifies full installed filter predicates without launching Claude, changing rules or calling an external checker.
+- [Current evidence and research comparison](docs/STATUS-2026-10-01.md): separates observed local results, older tests and unverified workflows.
+- Keep account profiles, live manifests, exit addresses and integrity baselines private. The production client and logged-in session are not included.
+
 
 [Website: Chinese / English](https://jiusi1-cpu.github.io/claude-private-browser-kit/) | [简体中文](README.zh-CN.md) | English
 
@@ -8,7 +17,7 @@ For users in China and other cross-region setups concerned about account restric
 
 This is an environment-audit and separation toolkit, not proven anti-ban technology. Whether these conditions affect Claude enforcement, and by how much, is unknown. It does not reverse-engineer or bypass platform detection, or establish service eligibility.
 
-![Claude Private Browser Kit architecture: a dedicated Claude browser route alongside the unchanged daily browser route](assets/social-preview.png)
+![Claude Account Risk Toolkit architecture: a dedicated Claude browser route alongside the unchanged daily browser route](assets/social-preview.png)
 
 **Windows case tested | MIT | Agent-led setup | Research preview**
 

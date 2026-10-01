@@ -1,14 +1,23 @@
-# Claude 专用浏览器工具包
+# Claude 防封方案
+
+## 10 月 1 日更新
+
+项目名称调整为 **Claude 防封方案**，仓库链接保持不变。“防封”表达用户关注的问题，不代表已证实的免封效果。
+
+- [登录态安全检查与只读 WFP 工具](docs/OFFLINE-AUDIT.md)：核对完整规则条件，不启动 Claude、不改规则、不访问外部检测站。
+- [最新实测与调研对照](docs/STATUS-2026-10-01.md)：明确当前观察、旧测试和未验证项。
+- 账号资料、真实清单、出口地址和完整性基线只留本机，不随公开包上传。
+
 
 **担心 Claude 账号风控？先把本机网络与浏览器环境理清。**
 
 [项目网站：自动选择中英文](https://jiusi1-cpu.github.io/claude-private-browser-kit/) · [English](README.en.md) · [完整中文指南](docs/GUIDE.zh-CN.md) · [检查清单](docs/CHECKLIST.md) · [反馈问题](https://github.com/jiusi1-cpu/claude-private-browser-kit/issues)
 
-Claude Private Browser Kit 面向中国用户及其他跨区域使用场景中关注账号限制的人群。它把可检查的本机问题拆开处理：浏览器资料混用、意外直连、DNS / WebRTC 暴露，以及桌面端和 MCP 入口不一致。让本地 AI Agent 执行环境自检、隔离配置、验收与回滚，而不是让用户自己研究脚本。
+Claude Account Risk Toolkit 面向中国用户及其他跨区域使用场景中关注账号限制的人群。它把可检查的本机问题拆开处理：浏览器资料混用、意外直连、DNS / WebRTC 暴露，以及桌面端和 MCP 入口不一致。让本地 AI Agent 执行环境自检、隔离配置、验收与回滚，而不是让用户自己研究脚本。
 
 **定位是环境自检与隔离，不是已经证实的“防封”技术。** 这些现象是否影响 Claude 风控、影响多大，现有证据无法确定；本项目不逆向或绕过平台检测，不改变服务使用资格。
 
-![Claude 专用浏览器工具包：Claude 与日常软件分开使用浏览器](assets/social-preview-zh.png)
+![Claude 防封方案：Claude 与日常软件分开使用浏览器](assets/social-preview-zh.png)
 
 **Windows 本机案例已验证 · MIT 开源 · Agent 执行 · 研究预览版**
 

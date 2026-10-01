@@ -1,10 +1,12 @@
 {
   "name": "claude-private-browser-kit",
-  "version": "0.1.0-preview",
+  "version": "0.2.0-preview",
   "private": true,
-  "description": "Windows app-scoped browser routing, network isolation reference code, and evidence-based audit checklists",
+  "description": "Claude 防封方案: agent-led Windows environment audits and browser isolation; no ban-prevention guarantee",
   "license": "MIT",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "test": "node tests/private-links.cjs && node tests/audit.cjs && node tests/language.cjs && node tests/handoff.cjs",
     "audit:local": "node scripts/audit.cjs",

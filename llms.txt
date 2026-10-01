@@ -1,4 +1,4 @@
-# Claude Private Browser Kit
+# Claude Account Risk Toolkit
 
 > 面向中国及其他跨区域场景中关注账号风控的用户，提供 Claude 环境自检、浏览器分离与网络限制。For users concerned about account restrictions: agent-led Windows environment auditing and separation, not proven anti-ban technology. Selected controls were tested in one Windows case; detection avoidance and reduced ban rates remain unproven.
 
@@ -32,3 +32,9 @@ When a user gives this repository URL and asks for setup, start with these instr
 - [Research evidence](docs/RESEARCH-X.md): community reports and uncertainty.
 - [Package map](docs/PACKAGE-MAP.md): source and excluded private/vendor material.
 - [Contributing](CONTRIBUTING.md): reproducible, privacy-preserving reports.
+
+## Latest scope
+
+- [Offline WFP audit](docs/OFFLINE-AUDIT.md): full-predicate read-only inspection; no external probes.
+- [2026-10-01 evidence](docs/STATUS-2026-10-01.md): local observations, limitations and research references.
+
